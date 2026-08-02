@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="xSlagen PS - Rotterdam MAAS PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="0.25">
+      <leg starboardXTD="0.0269978401727862" portsideXTD="0.0269978401727862" geometryType="Loxodrome" speedMax="13" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Slagen PLS" radius="0.25">
+      <position lat="59.0750833333333" lon="10.5734166666667" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 175 (T)&#xD;&#xA;Pos Fix at WOP:  Store Faerder RB/RD: 272 x 1.57 Nm&#xD;&#xA;Pos Fix 6' | Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 65m  XTE: 500m &#xD;&#xA;Use PI, VIS, XC whenever possible.&#xD;&#xA;PI @ Store Faerder = 1.71 Nm &#xD;&#xA;Traffic info: Pilot disembarkation. SOSP on this leg.&#xD;&#xA;Caution: beware of vsl's entering Oslofjorden.&#xD;&#xA;Pilot ladder rigged acc. to IMO regulations.&#xD;&#xA;VHF watch: &#xD;&#xA;CH 18 Horten VTS&#xD;&#xA;CH 13 Horten Pilot&#xD;&#xA;E/S: ON&#xD;&#xA;BNWAS: OFF/12'&#xD;&#xA;Change ECDIS SETTINGS to Coastal:&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm&#xD;&#xA;Safety Depth/Contour:  &#xD;&#xA;Time: Psn:&#xD;&#xA;BRIDGE WATCH LVL  IV/II&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="2" name="Tristein" radius="0.25">
+      <position lat="58.9848775233642" lon="10.5899009166991" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 228 (T)&#xD;&#xA;Pos Fix at WP: Faerder Racon (T) RB/RD: 322 x 3.24 Nm&#xD;&#xA;Pos Fix 6'/12' (as marked on ECDIS)&#xD;&#xA;Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 143m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: Vsl naviagting towards recommended routes Off the coast of southern Norway.&#xD;&#xA;Caution: beware of vsl's entering Oslofjorden.&#xD;&#xA;VHF watch: &#xD;&#xA;CH 18 Horten VTS&#xD;&#xA;E/S: ON/OFF (as marked on ECDIS)&#xD;&#xA;BNWAS: OFF/12'&#xD;&#xA;Change ECDIS SETTINGS to:&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;Safety Depth/Contour:  &#xD;&#xA;BRIDGE WATCH LVL  IV/II/I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="3" name="Leaving Nowegian Baseline" radius="0.25">
+      <position lat="58.9634265125582" lon="10.5431535034711" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" />
+    </waypoint>
+    <waypoint id="4" name="TSS IN " radius="0.25">
+      <position lat="58.540436057778" lon="9.62725260207806" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 222 (T)&#xD;&#xA;Pos Fix at WP: Stangholmen RB/RD: 310 x 15.6 Nm&#xD;&#xA;Pos Fix 12' | Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: &gt;300m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: Vsl entering TSS &quot;Off Risor&quot;&#xD;&#xA;Caution: Coastal navigation&#xD;&#xA;E/S: OFF &#xD;&#xA;BNWAS: 12'&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="5" name="TSS Crossing" radius="0.25">
+      <position lat="58.0081175166951" lon="8.7203907495184" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 187 (T)&#xD;&#xA;Pos Fix at WP: Gasa Racon (G) RB/RD: 221 x 15.1 Nm&#xD;&#xA;Pos Fix 12' | Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: &gt;300m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: Vsl crossing TSS &quot;Off Lilesand&quot;, keep extreme caution + follow COLREGS&#xD;&#xA;Caution: beware of high-speed ferries crossing planned route&#xD;&#xA;E/S: OFF &#xD;&#xA;BNWAS: 12'&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="Off southern Norway" radius="0.25">
+      <position lat="57.8510151724784" lon="8.68458298909783" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 211 (T)&#xD;&#xA;Pos Fix at WP: DGPS&#xD;&#xA;Pos Fix 12'/30' (as marked on ECDIS)&#xD;&#xA;Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 39m  XTE: 1000m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: Vsl safely crossed TSS, follow planned route and be alert all the time&#xD;&#xA;Caution:  Explosives dumping ground boundary in nearby of route&#xD;&#xA;E/S: OFF/ON (as marked on ECDIS)&#xD;&#xA;BNWAS: 12'&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="7" name="Hanstholm" radius="0.25">
+      <position lat="57.2217613391749" lon="7.99203081802261" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 206 (T)&#xD;&#xA;Pos Fix at WP: DGPS&#xD;&#xA;Pos Fix 30'/12'/30' (as marked on ECDIS)&#xD;&#xA;Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 26m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: Keep sharp lookout for small fishing vsl's&#xD;&#xA;Caution:  No go areas in vicinity - stay awake&#xD;&#xA;E/S: ON&#xD;&#xA;BNWAS: 12'&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="8" name="Nordsoen" radius="0.25">
+      <position lat="56.597256688653" lon="7.44077704130001" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 214 (T)&#xD;&#xA;Pos Fix at WP: DGPS&#xD;&#xA;Pos Fix 30' | Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 31m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: possibility of high traffic&#xD;&#xA;Caution: avoid marked dangerous wrecks&#xD;&#xA;VHF watch: &#xD;&#xA;CH 11 German North Sea Traffic&#xD;&#xA;E/S: ON&#xD;&#xA;BNWAS: 12'&#xD;&#xA;Change ECDIS SETTINGS to Open Sea:&#xD;&#xA;ECDIS LOOK-AHEAD:  20' x 2.0 nm   &#xD;&#xA;Safety Depth/Contour:  &#xD;&#xA;Time: Psn:&#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="9" name="Deutsche Bucht" radius="0.25">
+      <position lat="55.1646802832402" lon="5.71584017343698" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 202 (T)&#xD;&#xA;Pos Fix at WP: DGPS&#xD;&#xA;Pos Fix 30'/12' (as marked on ECDIS)&#xD;&#xA;Pos Fix: DGPS, RB/RD, CEL, DR&#xD;&#xA;Min Depth: 37m  XTE: 500m &#xD;&#xA;Use XC whenever possible.&#xD;&#xA;Traffic info: heading towards junction area of TSS Friesland &#xD;&#xA;Caution: at the end of the leg crossing TSS&#xD;&#xA;E/S: ON&#xD;&#xA;BNWAS: 12'&#xD;&#xA;Change ECDIS SETTINGS to Coastal:&#xD;&#xA;ECDIS LOOK-AHEAD:  15' x 0.4 nm   &#xD;&#xA;Safety Depth/Contour: &#xD;&#xA;Time: Psn:&#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="10" name="TSS North Friesland" radius="0.5">
+      <position lat="54.0976175031064" lon="4.98777289475254" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 202 (T)&#xD;&#xA;Pos Fix at WOP: Prod G16a-A: RB=078 x 7.7 nm&#xD;&#xA;FOLLOW COLREG's at all times &#xD;&#xA;Expect dense crossing traffic - apply caution !&#xD;&#xA;Pos fix 12'/6'/12'/30' Min.Depth: 26.5m XTE: 500m. &#xD;&#xA;Use PI, VB, RB, GPS, DR.&#xD;&#xA;PI = 2.12 nm @ L5-C Platform&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm&#xD;&#xA;BRIDGE WATCH LVL  I&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="11" name="TSS Vlieland North" radius="0.5">
+      <position lat="53.5969572179096" lon="4.6431010087425" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 198 (T)&#xD;&#xA;Pos Fix at WOP: Prod L8-G Racon (G) : RB=235 x1.68`&#xD;&#xA;Pos fix: 12 min  Min.Depth: 24m  XTE: 500m.&#xD;&#xA;Caution:  TSS JUNCTION - Traffic joining southbound lane&#xD;&#xA;PI = 1.04nm @ PROD L8-G&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I &#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="12" name="by VL 2A" radius="0.5">
+      <position lat="53.2993460835966" lon="4.48342357659079" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 202(T)&#xD;&#xA;Pos Fix at WOP: Prod L13 FE-1: RB=276 x8.48`&#xD;&#xA;Pos fix 12'  Min.Depth: 24.1 m  XTE:500m.&#xD;&#xA;NAVIGATING TSS: apply COLREG's Rule X&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I &#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="13" name="by VL 2" radius="0.5">
+      <position lat="53.1690612340182" lon="4.3950846869143" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 230 (T)&#xD;&#xA;Pos Fix at WOP: DGPS - no fixed &amp; RADAR conspicuous objects&#xD;&#xA;Pos fix 12'  Min.Depth: 24.5 m  XTE:500m.&#xD;&#xA;NAVIGATING TSS Texel: apply COLREG's Rule X&#xD;&#xA;PI = 2.33 nm @ HAVEN A Platform&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I &#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="14" name="by TX - W" radius="0.5">
+      <position lat="52.9618790779904" lon="3.9980557701062" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 191 (T)&#xD;&#xA;Pos Fix at WOP: RB Prod Haven A 081 x 3.90NM&#xD;&#xA;Pos fix 12'  Min.Depth: 20.7 m  XTE:500m.&#xD;&#xA;Leaving TSS: Proceed southbound - crossing area end of leg&#xD;&#xA;PI = 3.77 nm @ Prod. Q1 Helder A&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I &#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="15" name="by MN 4" radius="0.5">
+      <position lat="52.3766522609588" lon="3.81186031481" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 190(T)&#xD;&#xA;Pos Fix at WOP: DGPS - no fixed &amp; RADAR conspicuous objects&#xD;&#xA;Pos fix 12'  Min.Depth: 18.6 m  XTE:500m.&#xD;&#xA;PI  = 0.92 nm @ Prod. P15-A&#xD;&#xA;Entering MAAS TSS //  Approaching Rotterdam &#xD;&#xA;Call Mass Approach on Ch 01 when passing reporting point&#xD;&#xA;EOSP on next leg; prepare vsl and call crew in ample time&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I //III &#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="16" name="Cutting Junction" radius="0.5">
+      <position lat="52.23575632383" lon="3.77164064479623" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 182 (T)&#xD;&#xA;Pos Fix at WOP: RB Prod P15-C 237 x 1.40NM&#xD;&#xA;Pos fix 12'   Min.Depth: 18.7m  XTE:500m &#xD;&#xA;EOSP on this leg, Master TOC, ER on standby, crew standby&#xD;&#xA;VHF Watch: CH 01 MAAS Approach // CH 02 MAAS Pilots&#xD;&#xA;Report to MAAS Pilots CH 02 a/p ECDIS&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  I/III&#xD;&#xA;&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="17" name="Pilot approach" radius="0.25">
+      <position lat="52.1205168047243" lon="3.76578576755756" />
+      <leg starboardXTD="0.0269978401727862" portsideXTD="0.0269978401727862" geometryType="Loxodrome" legReport="A/C to 175 (T)&#xD;&#xA;Pos fix 12'   Min.Depth: 18.7m  XTE:500m &#xD;&#xA;VSL on standby - ready to pickup pilot&#xD;&#xA;VHF Watch: CH 01 MAAS Approach // CH 02 MAAS Pilots&#xD;&#xA;Passing DW Route mid leg, keep caution!&#xD;&#xA;Rig pilot ladder a/p instructions of pilot&#xD;&#xA;ECDIS LOOK-AHEAD: 15' x 0.4 nm &#xD;&#xA;BRIDGE WATCH LVL  III&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="18" name="MAAS PS" radius="0.25">
+      <position lat="51.9835476871021" lon="3.78386257666874" />
+      <leg starboardXTD="0.0269978401727862" portsideXTD="0.0269978401727862" geometryType="Loxodrome" speedMax="13" legReport="Min depth 7.8m &#xD;&#xA;Traffic info:Pilot embarkation point.Pilotage, Bridge watch level IV.Monitor depth carefully !!&#xD;&#xA;Please refer to consecutive passage plan.&#xD;&#xA;" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <manual>
+        <scheduleElement waypointId="1" speed="13" />
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="13" />
+        <scheduleElement waypointId="9" speed="13" />
+        <scheduleElement waypointId="10" speed="13" />
+        <scheduleElement waypointId="11" speed="13" />
+        <scheduleElement waypointId="12" speed="13" />
+        <scheduleElement waypointId="13" speed="13" />
+        <scheduleElement waypointId="14" speed="13" />
+        <scheduleElement waypointId="15" speed="13" />
+        <scheduleElement waypointId="16" speed="13" />
+        <scheduleElement waypointId="18" speed="13" />
+      </manual>
+      <calculated>
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="13" />
+        <scheduleElement waypointId="9" speed="13" />
+        <scheduleElement waypointId="10" speed="13" />
+        <scheduleElement waypointId="11" speed="13" />
+        <scheduleElement waypointId="12" speed="13" />
+        <scheduleElement waypointId="13" speed="13" />
+        <scheduleElement waypointId="14" speed="13" />
+        <scheduleElement waypointId="15" speed="13" />
+        <scheduleElement waypointId="16" speed="13" />
+        <scheduleElement waypointId="17" speed="18.0000004449107" />
+        <scheduleElement waypointId="18" speed="13" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

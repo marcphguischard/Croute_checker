@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="ELBE PS - FRDKK PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1">
+      <leg starboardXTD="0.377969762419006" portsideXTD="0.377969762419006" safetyContour="704.945013868896" geometryType="Loxodrome" />
+    </defaultWaypoint>
+    <waypoint id="1" name="ELBE PS" radius="1">
+      <position lat="54.0042425518037" lon="8.19029613246327" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="2" name="ENTERING TSS" radius="1">
+      <position lat="54.0351666666667" lon="7.7415" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="617.980957888231" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="3" name="BY BORKUMRIFF" radius="1">
+      <position lat="53.8413333333333" lon="6.37733333333333" />
+      <leg starboardXTD="0.485961123110151" portsideXTD="0.485961123110151" safetyContour="1481.6" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="4" name="by VL-C" radius="1">
+      <position lat="53.4781666666667" lon="4.62116666666667" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1504.49129903475" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="5" name="by VL-2" radius="1">
+      <position lat="53.1726666666667" lon="4.38983333333333" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1791.94009996777" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="6" name="by TX w" radius="1">
+      <position lat="52.9346666666667" lon="3.91566666666667" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="7" name="by BV W" radius="1">
+      <position lat="52.5511666666667" lon="3.40833333333333" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="8" name="by NHR N" radius="1">
+      <position lat="52.21" lon="3.018" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="3704" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="9" name="LTV FOXTROT" radius="1">
+      <position lat="51.4673865145353" lon="1.9817551805281" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2100.9186150993" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="10" name="BY INTER BANK" radius="1">
+      <position lat="51.2948785102502" lon="1.85416507811677" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1693.14957178792" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="11" name="BY F1" radius="1">
+      <position lat="51.1974611538639" lon="1.73144526740154" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1709.94240152659" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="12" name="BY MPC" radius="1">
+      <position lat="51.1212108260854" lon="1.64171573356232" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1250.0674216209" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="13" name="BY RUTENING SW" radius="1">
+      <position lat="51.0520431419104" lon="1.73558316737061" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1215.35728141612" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="14" name="FRDKK PS" radius="1">
+      <position lat="51.0344697767171" lon="1.84410066628548" />
+      <leg starboardXTD="0.377969762419006" portsideXTD="0.377969762419006" safetyContour="704.945013868896" geometryType="Loxodrome" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <calculated>
+        <scheduleElement waypointId="2" speed="18.0000004449107" />
+        <scheduleElement waypointId="3" speed="18.0000004449107" />
+        <scheduleElement waypointId="4" speed="18.0000004449107" />
+        <scheduleElement waypointId="5" speed="18.0000004449107" />
+        <scheduleElement waypointId="6" speed="18.0000004449107" />
+        <scheduleElement waypointId="7" speed="18.0000004449107" />
+        <scheduleElement waypointId="8" speed="18.0000004449107" />
+        <scheduleElement waypointId="9" speed="18.0000004449107" />
+        <scheduleElement waypointId="10" speed="18.0000004449107" />
+        <scheduleElement waypointId="11" speed="18.0000004449107" />
+        <scheduleElement waypointId="12" speed="18.0000004449107" />
+        <scheduleElement waypointId="13" speed="18.0000004449107" />
+        <scheduleElement waypointId="14" speed="18.0000004449107" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="FRDKK PS - Wandelaar PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1">
+      <leg starboardXTD="0.485961123110151" portsideXTD="0.485961123110151" safetyContour="518.562876539823" geometryType="Loxodrome" />
+    </defaultWaypoint>
+    <waypoint id="1" name="FRDKK PS" radius="1">
+      <position lat="51.0345152334382" lon="1.84392419291696" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="2" name="BY RUTENING SW" radius="1">
+      <position lat="51.0574907836592" lon="1.70324385343218" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="723.461731956339" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="3" name="LTV SANDETTIE" radius="1">
+      <position lat="51.1335250202987" lon="1.81294475592328" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1777.95467549652" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="4" name="BY SANDETTIE EST" radius="1">
+      <position lat="51.2189797019413" lon="2.07730729056741" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2407.6" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="5" name="Parameter Point" radius="1">
+      <position lat="51.3019876532828" lon="2.29234303647221" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1985.23581906706" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="6" name="BY BERGUES BK-N" radius="1">
+      <position lat="51.3229938298672" lon="2.34682242553696" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1289.00372079841" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="7" name="BY OD1" radius="1">
+      <position lat="51.3672950822888" lon="2.50731489503962" />
+      <leg starboardXTD="0.377969762419006" portsideXTD="0.377969762419006" safetyContour="729.979908661435" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="8" name="Approach Anchor" radius="1">
+      <position lat="51.3660155628762" lon="2.56047315567173" />
+      <leg starboardXTD="0.485961123110151" portsideXTD="0.485961123110151" safetyContour="423.039537580188" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="9" name="Anchor position" radius="1">
+      <position lat="51.3186412566369" lon="2.52224447341006" />
+      <leg starboardXTD="0.485961123110151" portsideXTD="0.485961123110151" safetyContour="518.562876539823" geometryType="Loxodrome" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <calculated>
+        <scheduleElement waypointId="2" speed="18.0000004449107" />
+        <scheduleElement waypointId="3" speed="18.0000004449107" />
+        <scheduleElement waypointId="4" speed="18.0000004449107" />
+        <scheduleElement waypointId="5" speed="18.0000004449107" />
+        <scheduleElement waypointId="6" speed="18.0000004449107" />
+        <scheduleElement waypointId="7" speed="18.0000004449107" />
+        <scheduleElement waypointId="8" speed="18.0000004449107" />
+        <scheduleElement waypointId="9" speed="18.0000004449107" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

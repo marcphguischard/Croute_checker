@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="FRDKK PS - Maas PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1">
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1481.6" geometryType="Loxodrome" />
+    </defaultWaypoint>
+    <waypoint id="1" name="FRDKK PS" radius="1">
+      <position lat="51.0345152334382" lon="1.84392419291696" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="2" name="BY RUYTININGEN SW" radius="1">
+      <position lat="51.0574019538039" lon="1.70333085048435" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" safetyContour="721.205414614815" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="3" name="LTV SANDETTIE" radius="1">
+      <position lat="51.1335250202987" lon="1.81294475592328" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1777.95467549652" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="4" name="BY SANDETTIE EST" radius="1">
+      <position lat="51.2248102317963" lon="2.09606381220057" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2407.6" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="5" name="BY HINDER 1" radius="1">
+      <position lat="51.4095282954296" lon="2.12737961437021" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1944.6" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="6" name="BY OHR7" radius="1">
+      <position lat="51.7712850951852" lon="2.62844697476817" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2963.2" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="7" name="BY MW5" radius="1">
+      <position lat="51.9250356230258" lon="3.409696831815" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2129.8" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="8" name="MAAS APPROACH PS" radius="1">
+      <position lat="51.9831772234766" lon="3.78387828683916" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1481.6" geometryType="Loxodrome" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <calculated>
+        <scheduleElement waypointId="2" speed="18.0000004449107" />
+        <scheduleElement waypointId="3" speed="18.0000004449107" />
+        <scheduleElement waypointId="4" speed="18.0000004449107" />
+        <scheduleElement waypointId="5" speed="18.0000004449107" />
+        <scheduleElement waypointId="6" speed="18.0000004449107" />
+        <scheduleElement waypointId="7" speed="18.0000004449107" />
+        <scheduleElement waypointId="8" speed="18.0000004449107" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

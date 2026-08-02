@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="xSines PS- Le Havre" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="0.5">
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Sines PS" radius="1">
+      <position lat="37.9199593519097" lon="-8.89744240418295" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 325(T)&#xD;&#xA;Pos fix 12 min DGPS/RB/VB/PI&#xD;&#xA;Fix @ WP: Molhe W 022 x 1.17 NM&#xD;&#xA;XTE: 700m Min Depth: 51 m&#xD;&#xA;Pilot off - proceed towards NW recommended TSS&#xD;&#xA;Keep listening watch VHF CH 12/14 untill next WP&#xD;&#xA;BWL II; E/S Running&#xD;&#xA;Change BNWAS 12 min'; ECDIS settings COASTAL 15 min 0.4 NM&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="2" name="Sines Port limit" radius="0.75">
+      <position lat="37.9933313371537" lon="-8.98421783301132" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 310(T)&#xD;&#xA;Pos fix 12/30 min DGPS/RB&#xD;&#xA;Fix @ WOP: Perceveira de Aguiao 113 x 3.09 nm&#xD;&#xA;XTE: 1000m Min Depth: 122 m&#xD;&#xA;VSL inside Sines recommended route proceed towards Roca TSS&#xD;&#xA;SOSP - vessel prepared for sea passage&#xD;&#xA;BWL I; E/S OFF; ECDIS settings OPEN SEA 20 min x 2 NM&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="3" name="Roca TSS IN" radius="0.75">
+      <position lat="38.5516614518272" lon="-9.89491280119821" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 347(T)&#xD;&#xA;Pos fix 30 min DGPS/DR/CEL&#xD;&#xA;Fix @ WOP: DGPS&#xD;&#xA;XTE: 1000m Min Depth: 902 m&#xD;&#xA;Entering Roca TSS - proceed inside DG lane&#xD;&#xA;Listening watch CH 22 Roca Control&#xD;&#xA;BWL I; Follow Master's standing orders&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="4" name="ROCA TSS WP" radius="1">
+      <position lat="38.7097300643" lon="-9.94653750811263" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 000(T)&#xD;&#xA;Pos fix 30 min DGPS/DR/CEL&#xD;&#xA;Fix @ WOP: DGPS&#xD;&#xA;XTE: 1000m Min Depth: 93 m&#xD;&#xA;Inside Roca TSS - proceed inside DG lane&#xD;&#xA;Listening watch CH 22 Roca Control &#xD;&#xA;When leaving VTS Roca Area - send email w/ designators A and H&#xD;&#xA;End of leg: Report to Finisterre Traffic CH 11&#xD;&#xA;BWL I; Follow Master's standing orders&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="5" name="Finisterre TSS WP" radius="1">
+      <position lat="43.2529100687197" lon="-9.94958320577222" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 028(T)&#xD;&#xA;Pos fix 30/12 min DGPS/DR/CEL&#xD;&#xA;Fix @ WOP: DGPS&#xD;&#xA;XTE: 1000m Min Depth: 90 m&#xD;&#xA;Inside Finisterre TSS - proceed in DG route&#xD;&#xA;Listening watch CH 11 Finisterre Traffic&#xD;&#xA;End of leg: Report to Ouessant Traffic CH 13&#xD;&#xA;Call Engineers before SECA a/p request&#xD;&#xA;BWL I; Follow Master's standing orders&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="Ouessant" radius="0.5">
+      <position lat="48.7635319101174" lon="-5.61480515069488" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 060 (T)&#xD;&#xA;Pos fix 15'&#xD;&#xA;Min Depth: 75m &#xD;&#xA;Pos Fix at WOP: GPS&#xD;&#xA;Keep VHF Watch Ch 13&#xD;&#xA;XTE: 1000m &#xD;&#xA;Cross check position with celestial observation and dead reckoning&#xD;&#xA;WL I&#xD;&#xA;E/S On&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="7" name="Les Casquets In" radius="0.5">
+      <position lat="49.8202476732243" lon="-2.85466903811198" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 075 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 28m &#xD;&#xA;Pos Fix at WOP: RB LtV Channel 334.5x5.53&#xD;&#xA;XTE: 1000m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL I&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="8" name="by Bassurelle" radius="0.5">
+      <position lat="49.9983584450349" lon="-1.75124554075711" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" geometryType="Loxodrome" speedMax="13" legReport="A/C to 048 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 22.5m &#xD;&#xA;Pos Fix at WOP: RB GPS&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;Keep VHF Watch Ch 13&#xD;&#xA;Call Griz Nez Traffic Ch 13&#xD;&#xA;WL I&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="9" name="Le Havre" radius="0.5">
+      <position lat="49.5723530337985" lon="-0.232791441514186" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <manual>
+        <scheduleElement waypointId="1" speed="13" />
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="13" />
+        <scheduleElement waypointId="9" speed="13" />
+      </manual>
+      <calculated>
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="13" />
+        <scheduleElement waypointId="9" speed="13" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

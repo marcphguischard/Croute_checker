@@ -1,10 +1,16 @@
 === ROUTE CHECKER - MELDEPFLICHTEN ===
 
-Erstellt: 16.04.2026 19:49
-Geprüfte Wegpunkte: 2
+Erstellt: 02.08.2026 17:13
+Route: FRDKK PS - Maas PS
+Geprüfte Wegpunkte: 8
 
 MELDEPFLICHT: DS CALDOVREP SW
 Typ:          MAREP
 Frequenz:     Ch 13
 Aktion:       Melden Sie sich auf Ch 13 beim zuständigen MRCC
+
+MELDEPFLICHT: Calais VTS (blau)
+Typ:          VTS
+Frequenz:     Ch 17
+Aktion:       Melden Sie sich auf Ch 17 beim zuständigen MRCC
 

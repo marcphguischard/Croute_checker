@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="FRDKK PS - Elbe PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1">
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="471.255622694316" geometryType="Loxodrome" />
+    </defaultWaypoint>
+    <waypoint id="1" name="FRDKK PS" radius="1">
+      <position lat="51.0345152334382" lon="1.84392419291696" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" legReport="A/C 284 18M A2&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="2" name="BY RUYTININGEN SW" radius="1">
+      <position lat="51.0574019538039" lon="1.70333085048435" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" safetyContour="721.205414614815" geometryType="Loxodrome" legReport="A/C 042 19M A2&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="3" name="LTV SANDETTIE" radius="1">
+      <position lat="51.1335250202987" lon="1.81294475592328" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1610.16811894173" geometryType="Loxodrome" legReport="A/C63 23M A2&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="4" name="BY SANDETTIE EST" radius="1">
+      <position lat="51.2248141214982" lon="2.09606671431862" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2321.51910049383" geometryType="Loxodrome" legReport="A/C 006 19M A2&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="5" name="BY HINDER 1" radius="1">
+      <position lat="51.4371429882332" lon="2.12976788433935" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1846.0240634977" geometryType="Loxodrome" legReport="A/C 041 23M A1&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="BY OHR7" radius="1">
+      <position lat="52.1085232774699" lon="3.07141742321646" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1899.62479589185" geometryType="Loxodrome" legReport="A/C 045 21M A1&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="7" name="BY MW5" radius="1">
+      <position lat="52.8121755622739" lon="4.20752464607665" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 025 24M A1&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="8" name="BY TX3" radius="1">
+      <position lat="52.9848899650645" lon="4.34142633188909" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 033 22M A1&#xD;&#xA;CALL VTS OFF TEXEL  VHF CH 63 - ENTERING VTS AREA&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="9" name="BY VL S" radius="1">
+      <position lat="53.1398333333333" lon="4.50883333333333" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 026 22M A1&#xD;&#xA;VTS OFF TEXEL VHF CH 63&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="10" name="BY  VL 5" radius="1">
+      <position lat="53.4166666666667" lon="4.73" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 066 23M A1&#xD;&#xA;VTS OFF TEXEL VHF CH 63&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="11" name="By  VL-E" radius="1">
+      <position lat="53.4988333333333" lon="5.042" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 072 18M A1&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="12" name="GERMAN BIGHT TRAFFIC" radius="1">
+      <position lat="53.7615" lon="6.401" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="AC 077 16.8 A2&#xD;&#xA;Report to German Bright Traffik VHF ch 79 - ENERING VTS AREA&#xD;&#xA;Report to German Bright Traffik VHF ch 80- ENERING VTS AREA&#xD;&#xA; 2hr B4 arrival Report to BRUNSBUTTEL Elbe Pilot VHF ch 08&#xD;&#xA;1hr B4 arrival Report to BRUNSBUTTEL Elbe Pilot VHF ch 08&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="13" name="APP ELBE PILOT BGR" radius="1">
+      <position lat="53.9846666666667" lon="7.98366666666667" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" legReport="A/C 085 24M A2&#xD;&#xA;CALL CUXHAVEN ELBE TRAFFIC VHF CH 71&#xD;&#xA;BRUNSBUTTEL Elbe  Pilot VHF ch 8&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="14" name="ELBE PS" radius="1">
+      <position lat="53.9928333333333" lon="8.1505" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="471.255622694316" geometryType="Loxodrome" legReport="BRUNSBUTTEL Elbe  Pilot VHF ch 8&#xD;&#xA;" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <calculated>
+        <scheduleElement waypointId="2" speed="18.0000004449107" />
+        <scheduleElement waypointId="3" speed="18.0000004449107" />
+        <scheduleElement waypointId="4" speed="18.0000004449107" />
+        <scheduleElement waypointId="5" speed="18.0000004449107" />
+        <scheduleElement waypointId="6" speed="18.0000004449107" />
+        <scheduleElement waypointId="7" speed="18.0000004449107" />
+        <scheduleElement waypointId="8" speed="18.0000004449107" />
+        <scheduleElement waypointId="9" speed="18.0000004449107" />
+        <scheduleElement waypointId="10" speed="18.0000004449107" />
+        <scheduleElement waypointId="11" speed="18.0000004449107" />
+        <scheduleElement waypointId="12" speed="18.0000004449107" />
+        <scheduleElement waypointId="13" speed="18.0000004449107" />
+        <scheduleElement waypointId="14" speed="18.0000004449107" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

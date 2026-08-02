@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="Wandelaar PS - FRDKK PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1">
+      <leg starboardXTD="0.377969762419006" portsideXTD="0.377969762419006" safetyContour="704.945013868896" geometryType="Loxodrome" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Wandelaar PS" radius="1">
+      <position lat="51.3591888127787" lon="2.72330925051986" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="2" name="BY A-N" radius="1">
+      <position lat="51.3821061975343" lon="2.61312275292383" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="926" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="3" name="BY OD1" radius="1">
+      <position lat="51.384465972617" lon="2.50792810778816" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="676.429250723674" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="4" name="BY FAIRY SUD" radius="1">
+      <position lat="51.3374219113407" lon="2.28858148941545" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="847.088645035008" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="5" name="LTV FOXTROT" radius="1">
+      <position lat="51.4319626954614" lon="1.98279485695033" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1425.50241128053" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="6" name="BY INTER BANK" radius="1">
+      <position lat="51.2935291753623" lon="1.85780434078707" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1709.94240152659" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="7" name="BY F1" radius="1">
+      <position lat="51.1974611538639" lon="1.73144526740154" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1709.94240152659" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="8" name="BY MPC" radius="1">
+      <position lat="51.1212108260854" lon="1.64171573356232" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1250.0674216209" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="9" name="BY RUTENING SW" radius="1">
+      <position lat="51.0520431419104" lon="1.73558316737061" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1215.35728141612" geometryType="Loxodrome" />
+    </waypoint>
+    <waypoint id="10" name="FRDKK PS" radius="1">
+      <position lat="51.0344697767171" lon="1.84410066628548" />
+      <leg starboardXTD="0.377969762419006" portsideXTD="0.377969762419006" safetyContour="704.945013868896" geometryType="Loxodrome" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <calculated>
+        <scheduleElement waypointId="2" speed="18.0000004449107" />
+        <scheduleElement waypointId="3" speed="18.0000004449107" />
+        <scheduleElement waypointId="4" speed="18.0000004449107" />
+        <scheduleElement waypointId="5" speed="18.0000004449107" />
+        <scheduleElement waypointId="6" speed="18.0000004449107" />
+        <scheduleElement waypointId="7" speed="18.0000004449107" />
+        <scheduleElement waypointId="8" speed="18.0000004449107" />
+        <scheduleElement waypointId="9" speed="18.0000004449107" />
+        <scheduleElement waypointId="10" speed="18.0000004449107" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="xWaandelar PLS - Dunkirk PLS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="0.5">
+      <leg starboardXTD="0.134989200863931" portsideXTD="0.134989200863931" geometryType="Loxodrome" speedMax="8" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Wandelaar Pls" radius="0.25">
+      <position lat="51.3657087997467" lon="2.7145312002427" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 279 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 16.7m &#xD;&#xA;Pos Fix at WOP: RB Westhinder Light 277.5x10.49&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL II&#xD;&#xA;Keep Sharp lookout. Heavy traffic expected.&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="2" name="Westhinder" radius="0.25">
+      <position lat="51.3861792866205" lon="2.49830464287642" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 254 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 15.7m &#xD;&#xA;Pos Fix at WOP: RB Westhinder Light 274x2.56&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL I&#xD;&#xA;Call Waandelar Approach Ch 60&#xD;&#xA;Entering French Territorail Waters&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="3" name="Fairy Bank" radius="0.25">
+      <position lat="51.3472819294125" lon="2.28703917088397" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 292 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 20.8m &#xD;&#xA;Pos Fix at WOP: RB LtV Foxtrot 3 286.5x11.37&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL I&#xD;&#xA;Crossing traffic lanes. Keep sharp lookout&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="4" name="Tss in" radius="0.25">
+      <position lat="51.4197663800792" lon="2.00217698499633" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 252 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 30m &#xD;&#xA;Pos Fix at WOP: RB LtV Foxtrot 3 178x1.0&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL I&#xD;&#xA;Crossing traffic lanes. Keep sharp lookout&#xD;&#xA;E/S ON&#xD;&#xA;Call Dunkerque VTS Ch 73; 2 hrs before VTS area &#xD;&#xA;Call Pilotes Dunkerque Ch 72; 2 hrs B4 arrival&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="5" name="LtV Foxtrot 3" radius="0.25">
+      <position lat="51.3944480274262" lon="1.88060628182972" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 204 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 32m &#xD;&#xA;Pos Fix at WOP: RB LtV Foxtrot 3 084x4.6&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL II&#xD;&#xA;Call Dover Coastguard Ch 11&#xD;&#xA;Crossing traffic lanes. Keep sharp lookout&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="South Falls" radius="0.5">
+      <position lat="51.2231666666667" lon="1.7585" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" geometryType="Loxodrome" speedMax="13" legReport="A/C to 220 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 24m &#xD;&#xA;Pos Fix at WOP: RB LtV Sandettie 165.5x4.18&#xD;&#xA;XTE: 500m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL II&#xD;&#xA;Passing Dover Strait. Keep sharp lookout for vessels in vicinity&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="7" name="by MPC" radius="0.5">
+      <position lat="51.0962324378866" lon="1.58741300290912" />
+      <leg starboardXTD="0.134989200863931" portsideXTD="0.134989200863931" geometryType="Loxodrome" speedMax="13" legReport="A/C to 129 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 23.5m &#xD;&#xA;Pos Fix at WOP: RB LtV Sandettie 066.5x7.8&#xD;&#xA;XTE: 250m &#xD;&#xA;Keep VHF Watch Ch 13 for Griz Nez&#xD;&#xA;Call Griz Nez Ch 13 when entering its jurisdiction&#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;WL II&#xD;&#xA;Crossing traffic lanes. Proceed with extreme caution&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="8" name="by Ruytingen" radius="0.5">
+      <position lat="51.0340901935414" lon="1.70977061015471" />
+      <leg starboardXTD="0.134989200863931" portsideXTD="0.134989200863931" geometryType="Loxodrome" speedMax="10" legReport="A/C to 090 (T)&#xD;&#xA;Poos fix 12'&#xD;&#xA;Min Depth: 23.5m &#xD;&#xA;Pos Fix at WOP: RB LtV Sandettie 023x7.77&#xD;&#xA;XTE: 250m &#xD;&#xA;Use PI, RB, VB when possible.&#xD;&#xA;Call Dunkerque VTS Ch 73 &amp; Pilotes Dunkerque Ch 72 when entering VTS area&#xD;&#xA;Approaching to Pilot Station. Vsl in Stand by Mode&#xD;&#xA;WL II&#xD;&#xA;E/S ON&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="9" name="Dunkirk PLS" radius="0.5">
+      <position lat="51.0343333333333" lon="1.84416666666667" />
+      <leg starboardXTD="0.134989200863931" portsideXTD="0.134989200863931" geometryType="Loxodrome" speedMax="8" legReport="Pilot Embarkation. Min depth 26m. Upload next passage plan.&#xD;&#xA;" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <manual>
+        <scheduleElement waypointId="1" speed="13" />
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="10" />
+        <scheduleElement waypointId="9" speed="8" />
+      </manual>
+      <calculated>
+        <scheduleElement waypointId="2" speed="13" />
+        <scheduleElement waypointId="3" speed="13" />
+        <scheduleElement waypointId="4" speed="13" />
+        <scheduleElement waypointId="5" speed="13" />
+        <scheduleElement waypointId="6" speed="13" />
+        <scheduleElement waypointId="7" speed="13" />
+        <scheduleElement waypointId="8" speed="10" />
+        <scheduleElement waypointId="9" speed="8" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

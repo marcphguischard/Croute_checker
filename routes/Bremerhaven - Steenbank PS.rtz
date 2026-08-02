@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="Bremerhaven - Steenbank PS" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="0.25">
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1111.2" geometryType="Loxodrome" speedMax="14.5" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Weser PS- outbound" radius="0.5">
+      <position lat="53.9805818072479" lon="7.48603628182527" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" />
+    </waypoint>
+    <waypoint id="2" name="by Borkumriff" radius="0.5">
+      <position lat="53.8220173139871" lon="6.30962832056995" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" />
+    </waypoint>
+    <waypoint id="3" name="Prod M7" radius="0.5">
+      <position lat="53.6016157376119" lon="5.17124422760699" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="2222.4" geometryType="Loxodrome" speedMax="14.5" />
+    </waypoint>
+    <waypoint id="4" name="by VL center" radius="0.5">
+      <position lat="53.4693052349176" lon="4.61199523217017" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" />
+    </waypoint>
+    <waypoint id="5" name="by VL 2" radius="0.5">
+      <position lat="53.1713612698297" lon="4.40723698210536" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" legReport="A/C to 230 (T)&#xD;&#xA;Pos fix 12'&#xD;&#xA;Min.Depth: 22m &#xD;&#xA;Prod L13 F-1: RB=316.5 x7.67`.  XTE:250m. &#xD;&#xA;Traffic info:E/S is ON.&#xD;&#xA;Use PI, RB, VB when possible&#xD;&#xA;Navigation in TSS; keep sharp lookout&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="by TX - W" radius="0.5">
+      <position lat="52.9333746271881" lon="3.93492177959803" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" legReport="A/C to 220 (T)&#xD;&#xA;Pos fix 15'&#xD;&#xA;Min.Depth: 20.7m &#xD;&#xA;Prod Haven A: RB=071 x6.68`.  XTE:250m. &#xD;&#xA;Traffic info:E/S is ON.&#xD;&#xA;Use PI, RB, VB when possible&#xD;&#xA;Navigation in TSS; keep sharp lookout&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="7" name="by BV W" radius="0.5">
+      <position lat="52.6247583266832" lon="3.50996002554071" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="14.5" legReport="A/C to 190(T)&#xD;&#xA;Pos fix 15'&#xD;&#xA;Min.Depth: 18.6m &#xD;&#xA;Prod Horizon P9-6: RB=117.5 x9.46`.  XTE:250m. &#xD;&#xA;Traffic info:E/S is ON.&#xD;&#xA;Use PI, RB, VB when possible&#xD;&#xA;Crossing TSS; keep sharp lookout&#xD;&#xA;Call Mass Approach on Ch 01 when passing reporting point (52-05.5N 003-22.3E)&#xD;&#xA;Call Traffic Centre Steenbank on Ch 64 30min B4 Pilot Station &#xD;&#xA;Call Traffic Centre Steenbank Ch 64 when passing reporting line&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="8" name="by SNE" radius="0.5">
+      <position lat="51.8057280513739" lon="3.27535010246785" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1203.8" geometryType="Loxodrome" speedMax="14.5" legReport="A/C to 204 (T)&#xD;&#xA;Pos fix12'&#xD;&#xA;Min.Depth: 18.7m &#xD;&#xA;GPS  XTE:250m. &#xD;&#xA;Traffic info:E/S is ON.&#xD;&#xA;Use PI, RB, VB when possible&#xD;&#xA;Approaching to Pilot Station; Vessel in Stand by mode&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="9" name="Steenbank PS" radius="0.25">
+      <position lat="51.7475553259465" lon="3.23497309578946" />
+      <leg starboardXTD="0.0539956803455724" portsideXTD="0.0539956803455724" safetyContour="1111.2" geometryType="Loxodrome" speedMax="14.5" legReport="Upload next passage plan&#xD;&#xA;Min depth 7.8m &#xD;&#xA;Pos fix:GPS XTE:50m &#xD;&#xA;Traffic info:Pilot embarkation point.Pilotage, Bridge watch level IV.Monitor depth carefully !!&#xD;&#xA;" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <manual>
+        <scheduleElement waypointId="1" speed="14.5" />
+        <scheduleElement waypointId="2" speed="14.5" />
+        <scheduleElement waypointId="3" speed="14.5" />
+        <scheduleElement waypointId="4" speed="14.5" />
+        <scheduleElement waypointId="5" speed="14.5" />
+        <scheduleElement waypointId="6" speed="14.5" />
+        <scheduleElement waypointId="7" speed="14.5" />
+        <scheduleElement waypointId="8" speed="14.5" />
+        <scheduleElement waypointId="9" speed="14.5" />
+      </manual>
+      <calculated>
+        <scheduleElement waypointId="2" speed="14.5" />
+        <scheduleElement waypointId="3" speed="14.5" />
+        <scheduleElement waypointId="4" speed="14.5" />
+        <scheduleElement waypointId="5" speed="14.5" />
+        <scheduleElement waypointId="6" speed="14.5" />
+        <scheduleElement waypointId="7" speed="14.5" />
+        <scheduleElement waypointId="8" speed="14.5" />
+        <scheduleElement waypointId="9" speed="14.5" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<route xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.cirm.org/RTZ/1/1">
+  <routeInfo routeName="95B Portland PS - Dunkirk PS - Copy" vesselName="GASCHEM BALTIC" vesselMMSI="636091265" vesselIMO="9269269" vesselSpeedMax="18.0000004449107" />
+  <waypoints>
+    <defaultWaypoint radius="1.19">
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" safetyContour="555.6" geometryType="Loxodrome" speedMax="13.5" />
+    </defaultWaypoint>
+    <waypoint id="1" name="Portland Anchor G6" radius="1">
+      <position lat="50.5925581976784" lon="-2.40275977567123" />
+      <leg starboardXTD="0.199784017278618" portsideXTD="0.199784017278618" safetyContour="926" geometryType="Loxodrome" speedMax="13.5" legReport="Initial WP A/C to 146* (T)&#xD;&#xA;Min Depth = 16.3m&#xD;&#xA;CATZOC A1&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL V&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="2" name="CG Reporting Point" radius="1">
+      <position lat="50.5569309837611" lon="-2.35373674435487" />
+      <leg starboardXTD="0.323974082073434" portsideXTD="0.323974082073434" safetyContour="555.6" geometryType="Loxodrome" speedMax="13.5" legReport="A/C to 121* (T)&#xD;&#xA;Min Depth = 19.5m&#xD;&#xA;CATZOC A1&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL I&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="3" name="Portland Bay out" radius="1">
+      <position lat="50.5056365798749" lon="-2.23988695068804" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1481.6" geometryType="Loxodrome" speedMax="13.5" legReport="A/C to 098* (T)&#xD;&#xA;Min Depth = 29.1m&#xD;&#xA;CATZOC A2&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL I&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="4" name="Crossing point" radius="1">
+      <position lat="50.3825715847681" lon="-1.0698622663102" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="1852" geometryType="Loxodrome" speedMax="13.5" legReport="A/C to 124* (T)&#xD;&#xA;Min Depth = 30.5m&#xD;&#xA;CATZOC A2&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL I&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="5" name="Eastbound traffic" radius="1">
+      <position lat="50.2512056564908" lon="-0.784085026476308" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="3704" geometryType="Loxodrome" speedMax="13.5" legReport="A/C to 075* (T)&#xD;&#xA;Min Depth = 36m&#xD;&#xA;CATZOC A2&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL I&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+    <waypoint id="6" name="LTV Greenwich" radius="1.19">
+      <position lat="50.3234155174808" lon="0.0345824317669491" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="4074.4" geometryType="Loxodrome" speedMax="13.5" />
+    </waypoint>
+    <waypoint id="7" name="BY BASURELLE" radius="1.19">
+      <position lat="50.4833333333333" lon="0.965" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="4074.4" geometryType="Loxodrome" speedMax="13.5" />
+    </waypoint>
+    <waypoint id="8" name="BY RIDENS" radius="1.19">
+      <position lat="50.695" lon="1.355" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2963.2" geometryType="Loxodrome" speedMax="13.5" />
+    </waypoint>
+    <waypoint id="9" name="CAP GRIS NEZ" radius="1.19">
+      <position lat="50.9116666666667" lon="1.475" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2592.8" geometryType="Loxodrome" speedMax="13.5" />
+    </waypoint>
+    <waypoint id="10" name="FRDKK APPROACH" radius="1.19">
+      <position lat="51.0583333333333" lon="1.69666666666667" />
+      <leg starboardXTD="0.539956803455724" portsideXTD="0.539956803455724" safetyContour="2407.6" geometryType="Loxodrome" speedMax="13.5" />
+    </waypoint>
+    <waypoint id="11" name="FRDKK PS" radius="1.19">
+      <position lat="51.0343942896749" lon="1.84427284324618" />
+      <leg starboardXTD="0.269978401727862" portsideXTD="0.269978401727862" safetyContour="555.6" geometryType="Loxodrome" speedMax="13.5" legReport="A/C to 000* (T)&#xD;&#xA;Min Depth = 40m&#xD;&#xA;CATZOC C&#xD;&#xA;Security lvl 1&#xD;&#xA;BWL II&#xD;&#xA;Pos. Ver. 30'&#xD;&#xA;Ecdis Settings: Coastal Waters&#xD;&#xA;" />
+    </waypoint>
+  </waypoints>
+  <schedules>
+    <schedule id="1" name="Schedule1">
+      <manual>
+        <scheduleElement waypointId="1" speed="13.5" />
+        <scheduleElement waypointId="2" speed="13.5" />
+        <scheduleElement waypointId="3" speed="13.5" />
+        <scheduleElement waypointId="4" speed="13.5" />
+        <scheduleElement waypointId="5" speed="13.5" />
+        <scheduleElement waypointId="6" speed="13.5" />
+        <scheduleElement waypointId="7" speed="13.5" />
+        <scheduleElement waypointId="8" speed="13.5" />
+        <scheduleElement waypointId="9" speed="13.5" />
+        <scheduleElement waypointId="10" speed="13.5" />
+        <scheduleElement waypointId="11" speed="13.5" />
+      </manual>
+      <calculated>
+        <scheduleElement waypointId="2" speed="13.5" />
+        <scheduleElement waypointId="3" speed="13.5" />
+        <scheduleElement waypointId="4" speed="13.5" />
+        <scheduleElement waypointId="5" speed="13.5" />
+        <scheduleElement waypointId="6" speed="13.5" />
+        <scheduleElement waypointId="7" speed="13.5" />
+        <scheduleElement waypointId="8" speed="13.5" />
+        <scheduleElement waypointId="9" speed="13.5" />
+        <scheduleElement waypointId="10" speed="13.5" />
+        <scheduleElement waypointId="11" speed="13.5" />
+      </calculated>
+    </schedule>
+  </schedules>
+</route>
