@@ -1,0 +1,10 @@
+=== ROUTE CHECKER - MELDEPFLICHTEN ===
+
+Erstellt: 16.04.2026 19:49
+Geprüfte Wegpunkte: 2
+
+MELDEPFLICHT: DS CALDOVREP SW
+Typ:          MAREP
+Frequenz:     Ch 13
+Aktion:       Melden Sie sich auf Ch 13 beim zuständigen MRCC
+
