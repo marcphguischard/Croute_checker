@@ -1,6 +1,8 @@
 import pandas as pd
-from shapely.geometry import Polygon, LineString
+from shapely.geometry import Polygon, LineString, Point
+from shapely.affinity import scale
 from datetime import datetime
+from math import cos, radians
 import xml.etree.ElementTree as ET
 import glob
 import os
@@ -27,10 +29,10 @@ def lade_rtz_route(pfad):
 # bis "Ja" oder "Nein" eingegeben wurde. Gibt den Text "Ja" oder "Nein" zurück.
 def frage_ja_nein(frage):
     while True:
-        antwort = input(f"{frage} (Ja/Nein): ").strip().capitalize()
-        if antwort in ("Ja", "Nein"):
+        antwort = input(f"{frage} (Yes/No): ").strip().capitalize()
+        if antwort in ("Yes", "No"):
             return antwort
-        print("Bitte 'Ja' oder 'Nein' eingeben.")
+        print("Please enter 'Yes' or 'No'.")
 
 # Fragt eine Zahl ab und gibt so lange erneut nach, bis eine gültige Zahl eingegeben wurde.
 # ist_ganzzahl=True verlangt eine ganze Zahl (z.B. für Personenanzahl), sonst sind Kommazahlen erlaubt (z.B. für GT).
@@ -40,74 +42,138 @@ def frage_zahl(frage, ist_ganzzahl=False):
         try:
             return int(eingabe) if ist_ganzzahl else float(eingabe)
         except ValueError:
-            print("Bitte eine Zahl eingeben.")
+            print("Please enter a number.")
 
 # Schritt 1: Schiffsdaten interaktiv abfragen und als Dictionary zurückgeben
 def frage_schiffsdaten():
-    print("=== SCHIFFSDATEN ===")
+    print("=== SHIP DATA ===")
 
     # 1. Schiffstyp aus einer festen Liste auswählen (wie bei der Routenauswahl)
-    schiffstypen = ["Tanker", "Chemikalientanker", "Gastanker",
-                    "Massengutfrachter", "Stückgutfrachter", "Sonstige"]
-    print("Schiffstyp:")
+    schiffstypen = ["Tanker", "Chemical tanker", "Gas tanker", "LNG tanker",
+                    "Bulk carrier", "General cargo ship", "Ferry", "Other"]
+    print("Ship type:")
     for i, typ in enumerate(schiffstypen, start=1):
         print(f"  {i}) {typ}")
     while True:
-        auswahl = input("Auswahl (Nummer): ").strip()
+        auswahl = input("Selection (number): ").strip()
         if auswahl.isdigit() and 1 <= int(auswahl) <= len(schiffstypen):
             schiffstyp = schiffstypen[int(auswahl) - 1]
             break
-        print("Bitte eine gültige Nummer eingeben.")
+        print("Please enter a valid number.")
 
     # 2. Bruttoraumzahl (GT) als Zahl
-    gt = frage_zahl("Bruttoraumzahl (GT)")
+    gt = frage_zahl("Gross tonnage (GT)")
+
+    # 2b. Tragfähigkeit (tdw) - wird für tonnage-abhängige Meldepflichten wie WETREP benötigt
+    #     (tdw ist NICHT dasselbe wie GT, daher eigene Abfrage/Spalte)
+    tdw = frage_zahl("Deadweight (tdw)")
 
     # 3. Internationale Fahrt: Ja/Nein
-    internationale_fahrt = frage_ja_nein("Internationale Fahrt")
+    internationale_fahrt = frage_ja_nein("International voyage")
 
     # 4. Gefahrgut an Bord: Ja/Nein, bei Ja zusätzlich die IMDG-Klasse als Freitext
-    gefahrgut = frage_ja_nein("Gefahrgut an Bord")
+    gefahrgut = frage_ja_nein("Dangerous goods on board")
     imdg_klasse = ""
-    if gefahrgut == "Ja":
-        imdg_klasse = input("IMDG-Klasse: ").strip()
+    if gefahrgut == "Yes":
+        imdg_klasse = input("IMDG class: ").strip()
+
+    # 4b. Schweröl/Schwerölkraftstoff/Bitumen-Ladung (relevant für WETREP)
+    schweroel_ladung = frage_ja_nein(
+        "Heavy fuel oil cargo (density >900kg/m³ at 15°C), heavy fuel (density >900kg/m³ "
+        "or viscosity >180mm²/s at 50°C), or bitumen/tar on board"
+    )
 
     # 5. Anzahl Personen an Bord als ganze Zahl
-    personen_an_bord = frage_zahl("Anzahl Personen an Bord", ist_ganzzahl=True)
+    personen_an_bord = frage_zahl("Number of persons on board", ist_ganzzahl=True)
 
     # 6. Tiefgang eingeschränkt / Sondertransport: Ja/Nein
-    sondertransport = frage_ja_nein("Tiefgang eingeschränkt / Sondertransport")
+    sondertransport = frage_ja_nein("Restricted draught / special transport")
+
+    # 6b/6c. Zustands-Ausnahmen, die die 300GT-Schwelle bei CALDOVREP aushebeln koennen (siehe
+    # erfuellt_schiffskriterien()). "Not under command" wird bewusst NICHT gefragt, da das nicht
+    # planbar ist (tritt unerwartet ein) - eingeschraenkte Manoevrierfaehigkeit kann dagegen auch
+    # planmaessig vorliegen (z.B. Schleppverband, Baggerarbeiten).
+    eingeschraenkt_manoevrierfaehig = frage_ja_nein("Restricted in ability to manoeuvre")
+    defekte_navigationshilfen = frage_ja_nein("Defective navigational aids")
 
     Schiffsdaten = {
         "schiffstyp": schiffstyp,
         "gt": gt,
+        "tdw": tdw,
         "internationale_fahrt": internationale_fahrt,
         "gefahrgut": gefahrgut,
         "imdg_klasse": imdg_klasse,
+        "schweroel_ladung": schweroel_ladung,
         "personen_an_bord": personen_an_bord,
         "sondertransport": sondertransport,
+        "eingeschraenkt_manoevrierfaehig": eingeschraenkt_manoevrierfaehig,
+        "defekte_navigationshilfen": defekte_navigationshilfen,
     }
     print()
     return Schiffsdaten
 
 # Schiffstypen, die als "Tanker" im Sinne von Nur_Tanker gelten
-TANKER_TYPEN = {"Tanker", "Chemikalientanker", "Gastanker"}
+TANKER_TYPEN = {"Tanker", "Chemical tanker", "Gas tanker", "LNG tanker"}
+
+# Baut eine Kreis-Geometrie mit echtem Radius in nautischen Meilen um (lon, lat) -
+# z.B. fuer Dover VTS / Ramsgate (3nm- bzw. 2.5nm-Melde-Kreis um die Hafeneinfahrt).
+#
+# WICHTIG: Ein einfacher Grad-Buffer (buffer(radius_nm/60)) waere KEIN echter Kreis in
+# nautischen Meilen, sondern in Ost-West-Richtung zu eng: 1 Grad Breite entspricht ueberall
+# ~60nm, aber 1 Grad Laenge entspricht bei ~51 Grad Nord nur ~60*cos(51 Grad) = ~38nm. Ein
+# Schiff, das genau von Osten/Westen auf den Hafen zulaeuft, koennte mit dem einfachen
+# Buffer faelschlich als "ausserhalb" gewertet werden, obwohl es innerhalb der echten
+# 3nm liegt. Deshalb wird der Kreis erst mit dem Breiten-Radius gebaut und dann in
+# Laengen-Richtung um 1/cos(Breite) gestreckt, damit er in allen Richtungen ~radius_nm
+# entspricht.
+def baue_kreis_geometrie(lon, lat, radius_nm):
+    mittelpunkt = Point(lon, lat)
+    radius_grad = radius_nm / 60.0  # 1 Grad Breite ~= 60 nm
+    kreis = mittelpunkt.buffer(radius_grad)
+    korrekturfaktor = 1 / cos(radians(lat))
+    return scale(kreis, xfact=korrekturfaktor, yfact=1.0, origin=mittelpunkt)
 
 # Prüft, ob die Schiffsdaten die Melde-Kriterien eines Gebiets erfüllen
 def erfuellt_schiffskriterien(daten, Schiffsdaten):
-    # GT muss mindestens Min_GT des Gebiets sein
-    if Schiffsdaten['gt'] < daten['min_gt']:
+    # GT muss mindestens Min_GT des Gebiets sein - AUSSER das Gebiet erlaubt eine Ausnahme
+    # bei eingeschraenkter Manoevrierfaehigkeit/defekten Navigationshilfen (z.B. CALDOVREP:
+    # Schiffe <300GT muessen trotzdem melden, wenn "restricted in ability to manoeuvre" oder
+    # "defective navigational aids" zutrifft - siehe ADP Abs. 2).
+    gt_ausnahme = (
+        daten['gt_ausnahme'] == "Ja"
+        and (Schiffsdaten['eingeschraenkt_manoevrierfaehig'] == "Yes"
+             or Schiffsdaten['defekte_navigationshilfen'] == "Yes")
+    )
+    if Schiffsdaten['gt'] < daten['min_gt'] and not gt_ausnahme:
         return False
 
-    # Falls das Gebiet nur bei Gefahrgut meldepflichtig ist
-    if daten['gefahrgut_pflicht'] == "Ja" and Schiffsdaten['gefahrgut'] != "Ja":
+    # Tragfähigkeit (tdw) muss mindestens Min_TDW des Gebiets sein (z.B. WETREP: >600 tdw)
+    if Schiffsdaten['tdw'] < daten['min_tdw']:
         return False
 
-    # Falls das Gebiet nur für Tankschiffe gilt
-    if daten['nur_tanker'] == "Ja" and Schiffsdaten['schiffstyp'] not in TANKER_TYPEN:
+    ist_tanker = Schiffsdaten['schiffstyp'] in TANKER_TYPEN
+    hat_gefahrgut = Schiffsdaten['gefahrgut'] == "Yes"
+
+    if daten['tanker_oder_gefahrgut'] == "Ja":
+        # Manche Gebiete (z.B. SURNAV Gris-Nez) gelten für Tankschiffe ODER Schiffe mit
+        # Gefahrgut an Bord (z.B. Containerschiffe mit IMDG-Ladung) - hier ODER statt UND.
+        if not (ist_tanker or hat_gefahrgut):
+            return False
+    else:
+        # Falls das Gebiet nur bei Gefahrgut meldepflichtig ist
+        if daten['gefahrgut_pflicht'] == "Ja" and not hat_gefahrgut:
+            return False
+
+        # Falls das Gebiet nur für Tankschiffe gilt
+        if daten['nur_tanker'] == "Ja" and not ist_tanker:
+            return False
+
+    # Falls das Gebiet nur bei Schweröl-/Schwerölkraftstoff-/Bitumen-Ladung gilt (z.B. WETREP)
+    if daten['schweroel_pflicht'] == "Ja" and Schiffsdaten['schweroel_ladung'] != "Yes":
         return False
 
     # Falls das Gebiet nur bei internationaler Fahrt gilt
-    if daten['nur_internationale_fahrt'] == "Ja" and Schiffsdaten['internationale_fahrt'] != "Ja":
+    if daten['nur_internationale_fahrt'] == "Ja" and Schiffsdaten['internationale_fahrt'] != "Yes":
         return False
 
     return True
@@ -131,6 +197,23 @@ def baue_gebiete(df):
                 'gefahrgut_pflicht': reihe['Gefahrgut_Pflicht'] if pd.notna(reihe['Gefahrgut_Pflicht']) else "Egal",
                 'nur_tanker': reihe['Nur_Tanker'] if pd.notna(reihe['Nur_Tanker']) else "Nein",
                 'nur_internationale_fahrt': reihe['Nur_Internationale_Fahrt'] if pd.notna(reihe['Nur_Internationale_Fahrt']) else "Nein",
+                # Neue Spalten für tonnage-/ladungsabhängige Gebiete (z.B. SURNAV, WETREP)
+                'min_tdw': reihe['Min_TDW'] if pd.notna(reihe['Min_TDW']) else 0,
+                'tanker_oder_gefahrgut': reihe['Tanker_Oder_Gefahrgut'] if pd.notna(reihe['Tanker_Oder_Gefahrgut']) else "Nein",
+                'schweroel_pflicht': reihe['Schweroel_Pflicht'] if pd.notna(reihe['Schweroel_Pflicht']) else "Nein",
+                # Radius in nm fuer Kreis-Gebiete (Dover VTS, Ramsgate); 0 = kein Kreis-Gebiet
+                'radius_nm': reihe['Radius_NM'] if pd.notna(reihe['Radius_NM']) else 0,
+                # "bedingt_inbound"/"bedingt_outbound" markieren Gebiete, die nur beim
+                # tatsaechlichen Anlaufen bzw. Verlassen des Hafens gelten (nicht bei reinem
+                # Durchtransit) - siehe Haupt-Loop
+                'pflicht_typ': reihe['Pflicht_Typ'] if pd.notna(reihe['Pflicht_Typ']) else "",
+                # GT-Ausnahme bei eingeschraenkter Manoevrierfaehigkeit/defekten Navigationshilfen
+                'gt_ausnahme': reihe['GT_Ausnahme_Bei_Einschraenkung'] if pd.notna(reihe['GT_Ausnahme_Bei_Einschraenkung']) else "Nein",
+                # Zusatzinfos fuer die Ausgabe (kein Einfluss auf die Trigger-Logik)
+                'dauerpflicht': reihe['Dauerpflicht'] if pd.notna(reihe['Dauerpflicht']) else "",
+                'meldeinhalt': reihe['Meldeinhalt'] if pd.notna(reihe['Meldeinhalt']) else "",
+                'faehre_hinweis': reihe['Faehre_Hinweis'] if pd.notna(reihe['Faehre_Hinweis']) else "",
+                'lng_hinweis': reihe['LNG_Hinweis'] if pd.notna(reihe['LNG_Hinweis']) else "",
             }
 
         # Koordinaten zum aktuellen Gebiet hinzufügen
@@ -149,31 +232,31 @@ Schiffsdaten = frage_schiffsdaten()
 rtz_dateien = sorted(glob.glob(os.path.join("routes", "*.rtz")))
 routen_name = None
 
-print("=== ROUTE AUSWÄHLEN ===")
+print("=== SELECT ROUTE ===")
 if rtz_dateien:
     for i, pfad in enumerate(rtz_dateien, start=1):
         print(f"  {i}) {os.path.basename(pfad)}")
-    print("  0) Manuell eingeben")
+    print("  0) Enter manually")
 
-    auswahl = input("\nRoute wählen (Nummer): ").strip().lstrip("﻿")
+    auswahl = input("\nSelect route (number): ").strip().lstrip("﻿")
 else:
     auswahl = "0"
 
 if rtz_dateien and auswahl != "0":
     routen_name, geladene_wegpunkte = lade_rtz_route(rtz_dateien[int(auswahl) - 1])
     wegpunkte = [(lon, lat) for lon, lat, _ in geladene_wegpunkte]
-    print(f"\nRoute geladen: {routen_name} ({len(wegpunkte)} Wegpunkte)")
+    print(f"\nRoute loaded: {routen_name} ({len(wegpunkte)} waypoints)")
     for lon, lat, name in geladene_wegpunkte:
         print(f"  - {name}: {lat:.5f}, {lon:.5f}")
     print()
 else:
-    print("\nWegpunkte eingeben (Format: Latitude Longitude, z.B. 50.5 1.0)")
-    print("Leere Eingabe zum Beenden\n")
+    print("\nEnter waypoints (format: Latitude Longitude, e.g. 50.5 1.0)")
+    print("Leave empty to finish\n")
 
     wegpunkte = []
     nummer = 1
     while True:
-        eingabe = input(f"Wegpunkt {nummer}: ")
+        eingabe = input(f"Waypoint {nummer}: ")
         if eingabe == "":
             break
 
@@ -185,58 +268,84 @@ testroute = LineString(wegpunkte)
 
 # Schritt 4: Zusammenfassung der Schiffsdaten anzeigen
 zusammenfassung_schiff = (
-    f"Geprüft für: {Schiffsdaten['schiffstyp']}, {Schiffsdaten['gt']:.0f} GT, "
-    f"Gefahrgut: {Schiffsdaten['gefahrgut']}, "
-    f"internationale Fahrt: {Schiffsdaten['internationale_fahrt']}"
+    f"Checked for: {Schiffsdaten['schiffstyp']}, {Schiffsdaten['gt']:.0f} GT, "
+    f"dangerous goods: {Schiffsdaten['gefahrgut']}, "
+    f"international voyage: {Schiffsdaten['internationale_fahrt']}"
 )
 
 # Schritt 3: Prüfen welche Gebiete die Route kreuzt
 # Ergebnisse sammeln und ausgeben
 print("=== ROUTE CHECKER ===")
 print(zusammenfassung_schiff)
-print("Prüfe Route auf Meldepflichten...\n")
+print("Checking route for reporting obligations...\n")
 
 gebiete = baue_gebiete(df)
 ergebnisse = []
 
+letzter_wegpunkt = Point(wegpunkte[-1]) if wegpunkte else None
+erster_wegpunkt = Point(wegpunkte[0]) if wegpunkte else None
+
 for name, daten in gebiete.items():
-    if len(daten['punkte']) >= 3:
-        polygon = Polygon(daten['punkte'])
-        # Geometrische Prüfung: kreuzt die Route das Gebiet?
-        # UND Schiffs-Kriterien-Prüfung: passen GT/Gefahrgut/Tankertyp/Fahrtgebiet zum Schiff?
-        if testroute.intersects(polygon) and erfuellt_schiffskriterien(daten, Schiffsdaten):
-            freq = f"Ch {int(daten['frequenz'])}" if pd.notna(daten['frequenz']) else "siehe ADP"
+    # Die meisten Gebiete sind Flächen (Polygon, >=3 Punkte) oder eine Zonengrenze
+    # zwischen zwei Zuständigkeiten (2 Punkte -> LineString, z.B. SURNAV Gris-Nez).
+    # Manche Gebiete (Dover VTS, Ramsgate) sind stattdessen ein Melde-Kreis mit
+    # festem Radius um einen einzigen Mittelpunkt (Radius_NM > 0).
+    geometrie = None
+    if len(daten['punkte']) == 1 and daten['radius_nm'] > 0:
+        lon, lat = daten['punkte'][0]
+        geometrie = baue_kreis_geometrie(lon, lat, daten['radius_nm'])
+    elif len(daten['punkte']) >= 3:
+        geometrie = Polygon(daten['punkte'])
+    elif len(daten['punkte']) == 2:
+        geometrie = LineString(daten['punkte'])
+
+    if geometrie is not None:
+        if daten['pflicht_typ'] == "bedingt_inbound":
+            # "bedingt_inbound" (z.B. Dover VTS, Ramsgate): Meldepflicht gilt NUR, wenn
+            # der Hafen tatsaechlich Ziel der Route ist - nicht bei reinem Durchtransit
+            # durch die Naehe. Als Zielhafen gilt der letzte Wegpunkt der Route; nur wenn
+            # DER innerhalb des Melde-Kreises liegt, greift die Meldepflicht - unabhaengig
+            # davon, ob die Route an anderer Stelle geometrisch durch den Kreis verlaeuft.
+            kreuzt = letzter_wegpunkt is not None and geometrie.contains(letzter_wegpunkt)
+        else:
+            # Normalfall: JEDE Kreuzung der Route mit dem Gebiet loest die Meldepflicht aus.
+            kreuzt = testroute.intersects(geometrie)
+
+        # Geometrische/situative Prüfung (s.o.) UND Schiffs-Kriterien-Prüfung: passen
+        # GT/Gefahrgut/Tankertyp/Fahrtgebiet zum Schiff?
+        if kreuzt and erfuellt_schiffskriterien(daten, Schiffsdaten):
+            freq = f"Ch {int(daten['frequenz'])}" if pd.notna(daten['frequenz']) else "see ADP"
             eintrag = {
                 'gebiet': name,
                 'typ': daten['typ'],
                 'frequenz': freq
             }
             ergebnisse.append(eintrag)
-            print(f"   MELDEPFLICHT: {name}")
-            print(f"   Typ:          {daten['typ']}")
-            print(f"   Frequenz:     {freq}")
-            print(f"   Aktion:       Melden Sie sich auf {freq} beim zuständigen MRCC")
+            print(f"   REPORTING REQUIRED: {name}")
+            print(f"   Type:          {daten['typ']}")
+            print(f"   Frequency:     {freq}")
+            print(f"   Action:        Report on {freq} to the responsible MRCC")
             print()
 
 if len(ergebnisse) == 0:
-    print("Keine Meldepflichten für diese Route gefunden.")
+    print("No reporting obligations found for this route.")
 
 # Ergebnis als Textdatei speichern
 import datetime
 with open("ergebnis.txt", "w") as datei:
-    datei.write("=== ROUTE CHECKER - MELDEPFLICHTEN ===\n\n")
-    datei.write(f"Erstellt: {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}\n")
+    datei.write("=== ROUTE CHECKER - REPORTING OBLIGATIONS ===\n\n")
+    datei.write(f"Created: {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}\n")
     if routen_name:
         datei.write(f"Route: {routen_name}\n")
-    datei.write(f"Geprüfte Wegpunkte: {len(wegpunkte)}\n")
+    datei.write(f"Waypoints checked: {len(wegpunkte)}\n")
     datei.write(f"{zusammenfassung_schiff}\n\n")
     for e in ergebnisse:
-        datei.write(f"MELDEPFLICHT: {e['gebiet']}\n")
-        datei.write(f"Typ:          {e['typ']}\n")
-        datei.write(f"Frequenz:     {e['frequenz']}\n")
-        datei.write(f"Aktion:       Melden Sie sich auf {e['frequenz']} beim zuständigen MRCC\n")
+        datei.write(f"REPORTING REQUIRED: {e['gebiet']}\n")
+        datei.write(f"Type:          {e['typ']}\n")
+        datei.write(f"Frequency:     {e['frequenz']}\n")
+        datei.write(f"Action:        Report on {e['frequenz']} to the responsible MRCC\n")
         datei.write("\n")
-       
 
-print("=== PRÜFUNG ABGESCHLOSSEN ===")
-print(f"\nErgebnis gespeichert als 'ergebnis.txt' in deinem Projektordner")
+
+print("=== CHECK COMPLETE ===")
+print(f"\nResult saved as 'ergebnis.txt' in your project folder")
