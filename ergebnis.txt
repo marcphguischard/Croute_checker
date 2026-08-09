@@ -1,7 +1,7 @@
-=== ROUTE CHECKER - MELDEPFLICHTEN ===
+=== ROUTE CHECKER - REPORTING OBLIGATIONS ===
 
-Erstellt: 02.08.2026 18:38
-Route: FRDKK PS - Maas PS
-Geprüfte Wegpunkte: 8
-Geprüft für: Tanker, 100 GT, Gefahrgut: Nein, internationale Fahrt: Ja
+Created: 09.08.2026 16:02
+Route: Bremerhaven - Steenbank PS
+Waypoints checked: 9
+Checked for: Ferry, 200 GT, dangerous goods: No, international voyage: No
 
