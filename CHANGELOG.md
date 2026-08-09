@@ -3,6 +3,89 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-08-09 – Outbound-Meldepflichten, Fähren/LNG, GT-Ausnahme, Boulogne/Rye, UK MAREP
+
+Basiert auf einer vollständigen Wort-für-Wort-Erfassung aller ADP-Texte der Dover-Strait-
+Region (8 Gebiete + 3 reine Lotsen-Häfen). Marc hat daraus gezielt gefiltert, was ins Tool
+kommt - nicht jede Einzelheit aus den ADP-Texten wurde übernommen (siehe "Bewusst nicht
+umgesetzt" unten).
+
+- **WICHTIGE KORREKTUR - Ramsgate-Zentrum**: Der bisherige Wert (51.32583) war ein
+  Rechenfehler in der vorherigen Vorlage. Korrektes Mittel aus den beiden
+  Leuchttonnen-Positionen (51°19.56'N + 51°19.46'N) / 2 = 51°19.51'N = **51.32517**.
+  Korrigiert in `reporting_points.csv`.
+- **Outbound-Meldepflichten (NEU)** (`main.py`, `reporting_points.csv`): Bisher wurde nur
+  geprüft, ob ein Hafen (Dover, Ramsgate) tatsächlich Ziel der Route ist (`bedingt_inbound`,
+  letzter Wegpunkt). Jetzt zusätzlich `bedingt_outbound`: prüft den **ersten** Wegpunkt der
+  Route - greift nur, wenn die Route tatsächlich im Hafenkreis startet (auslaufendes
+  Schiff), nicht bei reinem Durchtransit. Neue Gebiete "Dover VTS (Outbound)" und "Ramsgate
+  (Outbound)" (gleicher Kreis/Radius wie die bestehenden Inbound-Gebiete, nur andere
+  Pflicht_Typ-Prüfung).
+- **Neue Schiffstypen**: "Ferry" und "LNG tanker" (LNG tanker zählt zu `TANKER_TYPEN`).
+  Grund: Fähren haben bei Dover/Ramsgate abweichende Melde-Prozeduren (PEC-Nummer, Priority
+  Slots, kürzere Vorlaufzeiten statt 1h), LNG-Tanker bei Dunkerque VTS eine eigene ETA-Kette
+  und Sperrzonen-Regel.
+- **Neue Interviewfragen**: "Restricted in ability to manoeuvre" und "Defective
+  navigational aids" - bewusst OHNE "not under command" (auf Rückfrage: nicht planbar, tritt
+  unerwartet ein, im Gegensatz zu eingeschränkter Manövrierfähigkeit die z.B. bei
+  Schleppverbänden auch planmäßig vorliegen kann).
+- **GT-Ausnahme-Logik** (`erfuellt_schiffskriterien()`): Neue CSV-Spalte
+  `GT_Ausnahme_Bei_Einschraenkung`. Für CALDOVREP gesetzt: Schiffe <300GT melden trotzdem,
+  wenn eingeschränkt manövrierfähig ODER Navigationshilfen defekt sind (ADP Abs. 2).
+- **Zusatzinfos in der Ausgabe** (Konsole + `ergebnis.txt`), neue CSV-Spalten dafür:
+  - `Meldeinhalt`: Pflichtfelder der Meldung (A/B/C/... wie im ADP-Text), jetzt für ALLE
+    Gebiete befüllt und bei jedem Treffer angezeigt.
+  - `Dauerpflicht`: Dauer-/Zusatzpflichten (Hörwache-Kanäle, Sonderfälle), ebenfalls für
+    alle Gebiete befüllt und angezeigt. Bei SURNAV Gris-Nez steht hier u.a. die
+    Unfallmeldepflicht für ALLE Schiffe ≥300GT unabhängig von Ladung (rein informativ, kein
+    Trigger - siehe unten). Bei Dunkirk VTS die LNG-Sonderregeln.
+  - `Faehre_Hinweis` / `LNG_Hinweis`: nur angezeigt, wenn Schiffstyp passend (Ferry bzw.
+    LNG tanker) - bei Dover in/out (Fähre) und Dunkirk VTS (LNG).
+  - Diese Felder wurden nur auf der jeweils ERSTEN Zeile jedes Gebiets befüllt (einzige
+    Zeile, die `baue_gebiete()` tatsächlich liest), nicht auf jeder Punkte-Zeile wiederholt
+    wie die kurzen Kriterien-Spalten - sonst wäre die CSV bei WETREP (24 Punkte) & Co.
+    unnötig aufgebläht.
+- **UK MAREP als pauschaler Hinweis** (kein geprüftes Gebiet, da keine eigenen Koordinaten
+  im ADP-Text - verweist nur auf Gebiete außerhalb Dover Strait): wird am Ende der Ausgabe
+  gezeigt, wenn GT ≥300, mit Hinweis auf Freiwilligkeit. Erwähnt MANCHEREP/OUESSREP als die
+  verpflichtenden Pendants außerhalb des Dover-Strait-Fokus (auf Rückfrage: drin lassen,
+  "gehört irgendwie dazu", aber ohne eigene Koordinaten nicht geometrisch prüfbar).
+- **Neue Gebiete Boulogne und Rye** (`reporting_points.csv`), beide mit **approximiertem
+  Melde-Radius**, da der ADP-Text keinen expliziten Kreis nennt (im Gegensatz zu Dover/
+  Ramsgate mit klar benanntem Point Zulu/Romeo-Radius) - **klar als Annahme in der
+  Info-Spalte gekennzeichnet**, keine ADP-Vorgabe:
+  - Boulogne: 4sm-Lotsenpflicht-Gebiet als Näherung für den Melde-Radius übernommen.
+    Ladungsabhängig (Kohlenwasserstoffe/Gefahrstoffe, analog SURNAV-Logik via
+    `Tanker_Oder_Gefahrgut`).
+  - Rye: 5sm (äußere Grenze des im Text genannten VHF-Kontaktbereichs "5-2sm") als
+    Näherung, da die eigentliche Referenzposition ("No.2 red light tripod Bn") im Text
+    keine Koordinate hat.
+- **Point Echo (Dover)**: zeitbasiert (35min vom Hafeneingang), lässt sich nicht als eigene
+  Geometrie abbilden - als Hinweis in Dover VTS' `Meldeinhalt` aufgenommen (v.a.
+  Fähren-relevant), löst aber keinen eigenen geometrischen Trigger aus.
+- **Bewusst nicht umgesetzt** (auf Rückfrage):
+  - SURNAV-Unfallmeldepflicht (alle Schiffe ≥300GT, ereignisbasiert): nur als
+    Dauerpflicht-Hinweistext, kein eigener Trigger - passt nicht ins
+    Vorab-Routenprüfungs-Modell.
+  - Dunkerque-Wartebereich (Ch72-Dauerwache) und die 0.5sm-Sperrzone um ankernde
+    LNG-Schiffe: keine Koordinaten im ADP-Text vorhanden, daher nicht geometrisch
+    prüfbar - nur als Hinweistext in Dunkirk VTS' `Dauerpflicht`/`LNG_Hinweis`.
+  - CALDOVREP-Südgrenze (fehlender Küstenpunkt Frankreich): CSV unangetastet gelassen
+    (auf Rückfrage: "zu Genüge geprüft").
+  - Exemption Certificates (Ramsgate): rein informativer Meldeinhalt-Hinweis, keine
+    Filterkriterien-Relevanz - nicht umgesetzt.
+- **Getestet** (11 Szenarien, alle bestanden): Dover Inbound/Outbound/Transit (Transit löst
+  korrekt weder in- noch outbound aus), Dover Outbound als Ferry (Fähren-Hinweis erscheint),
+  Ramsgate Inbound/Outbound, LNG-Tanker durch Dunkirk VTS (LNG-Hinweis erscheint),
+  CALDOVREP GT-Ausnahme (GT<300 ohne Ausnahmegrund = kein Trigger, mit eingeschränkter
+  Manövrierfähigkeit ODER defekten Navigationshilfen = Trigger), Boulogne
+  ladungsabhängig (Tanker = Trigger, General Cargo ohne Gefahrgut = kein Trigger), Rye
+  Inbound, UK-MAREP-Hinweis erscheint nur bei GT≥300.
+- **WIP-Historie**: Dieser Batch wurde zwischenzeitlich unfertig committet (Outbound-Logik
+  fehlte noch, siehe Commit `423f95d`) und in einer Folgesession fertiggestellt - der
+  Push nach GitHub war zum Zeitpunkt des Zwischen-Commits nicht möglich (keine
+  Zugangsdaten im Tool-Environment hinterlegt, siehe Kommentar dort).
+
 ## 2026-08-08 (Teil 3) – Dover VTS, Ramsgate: Kreis-Gebiete mit Inbound-Bedingung
 
 - **Neue Gebiete Dover VTS und Ramsgate** (`reporting_points.csv`): Beide sind keine

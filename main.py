@@ -307,6 +307,12 @@ for name, daten in gebiete.items():
             # DER innerhalb des Melde-Kreises liegt, greift die Meldepflicht - unabhaengig
             # davon, ob die Route an anderer Stelle geometrisch durch den Kreis verlaeuft.
             kreuzt = letzter_wegpunkt is not None and geometrie.contains(letzter_wegpunkt)
+        elif daten['pflicht_typ'] == "bedingt_outbound":
+            # "bedingt_outbound" (z.B. Dover VTS (Outbound), Ramsgate (Outbound)):
+            # Spiegelbild von "bedingt_inbound" - Meldepflicht gilt NUR, wenn der Hafen
+            # tatsaechlich AUSGANGSPUNKT der Route ist (auslaufendes Schiff), nicht bei
+            # reinem Durchtransit. Als Abfahrtshafen gilt der ERSTE Wegpunkt der Route.
+            kreuzt = erster_wegpunkt is not None and geometrie.contains(erster_wegpunkt)
         else:
             # Normalfall: JEDE Kreuzung der Route mit dem Gebiet loest die Meldepflicht aus.
             kreuzt = testroute.intersects(geometrie)
@@ -315,20 +321,51 @@ for name, daten in gebiete.items():
         # GT/Gefahrgut/Tankertyp/Fahrtgebiet zum Schiff?
         if kreuzt and erfuellt_schiffskriterien(daten, Schiffsdaten):
             freq = f"Ch {int(daten['frequenz'])}" if pd.notna(daten['frequenz']) else "see ADP"
+            ist_faehre = Schiffsdaten['schiffstyp'] == "Ferry"
+            ist_lng = Schiffsdaten['schiffstyp'] == "LNG tanker"
             eintrag = {
                 'gebiet': name,
                 'typ': daten['typ'],
-                'frequenz': freq
+                'frequenz': freq,
+                'dauerpflicht': daten['dauerpflicht'],
+                'meldeinhalt': daten['meldeinhalt'],
+                'faehre_hinweis': daten['faehre_hinweis'] if ist_faehre else "",
+                'lng_hinweis': daten['lng_hinweis'] if ist_lng else "",
             }
             ergebnisse.append(eintrag)
             print(f"   REPORTING REQUIRED: {name}")
             print(f"   Type:          {daten['typ']}")
             print(f"   Frequency:     {freq}")
             print(f"   Action:        Report on {freq} to the responsible MRCC")
+            if eintrag['meldeinhalt']:
+                print(f"   Report content: {eintrag['meldeinhalt']}")
+            if eintrag['dauerpflicht']:
+                print(f"   Continuous watch/duty: {eintrag['dauerpflicht']}")
+            if eintrag['faehre_hinweis']:
+                print(f"   Ferry note:    {eintrag['faehre_hinweis']}")
+            if eintrag['lng_hinweis']:
+                print(f"   LNG note:      {eintrag['lng_hinweis']}")
             print()
 
 if len(ergebnisse) == 0:
     print("No reporting obligations found for this route.")
+
+# UK MAREP: freiwilliges Meldesystem, keine eigene Geometrie im ADP-Text (verweist nur auf
+# Gebiete ausserhalb Dover Strait) - daher als pauschaler Hinweis statt als geprueftes Gebiet,
+# analog zur "NACHDRUECKLICH ERMUTIGT"-Formulierung im Originaltext. Gilt fuer Handelsschiffe
+# ab 300GT. MANCHEREP/OUESSREP sind die verpflichtenden Versionen ausserhalb Dover Strait -
+# ohne eigene Koordinaten in den vorliegenden ADP-Texten, daher nur erwaehnt statt geprueft.
+if Schiffsdaten['gt'] >= 300:
+    print("   VOLUNTARY: UK MAREP")
+    print("   This is a voluntary reporting system (not mandatory in this area, since")
+    print("   CALDOVREP already covers the mandatory equivalent for the Dover Strait).")
+    print("   All merchant ships >=300GT are strongly encouraged to participate: report to")
+    print("   the relevant coastal station 1h before entering and again when leaving the")
+    print("   area (POSREP/DEFREP/CHANGEREP format). Mandatory versions of this system type")
+    print("   also apply in TSS Off Ushant (OUESSREP) and TSS Off Casquets (MANCHEREP) -")
+    print("   both outside this tool's Dover Strait scope and without their own coordinates")
+    print("   in the source ADP texts, so not geometrically checked here.")
+    print()
 
 # Ergebnis als Textdatei speichern
 import datetime
@@ -344,6 +381,28 @@ with open("ergebnis.txt", "w") as datei:
         datei.write(f"Type:          {e['typ']}\n")
         datei.write(f"Frequency:     {e['frequenz']}\n")
         datei.write(f"Action:        Report on {e['frequenz']} to the responsible MRCC\n")
+        if e['meldeinhalt']:
+            datei.write(f"Report content: {e['meldeinhalt']}\n")
+        if e['dauerpflicht']:
+            datei.write(f"Continuous watch/duty: {e['dauerpflicht']}\n")
+        if e['faehre_hinweis']:
+            datei.write(f"Ferry note:    {e['faehre_hinweis']}\n")
+        if e['lng_hinweis']:
+            datei.write(f"LNG note:      {e['lng_hinweis']}\n")
+        datei.write("\n")
+
+    if Schiffsdaten['gt'] >= 300:
+        datei.write("VOLUNTARY: UK MAREP\n")
+        datei.write(
+            "This is a voluntary reporting system (not mandatory in this area, since "
+            "CALDOVREP already covers the mandatory equivalent for the Dover Strait). "
+            "All merchant ships >=300GT are strongly encouraged to participate: report to "
+            "the relevant coastal station 1h before entering and again when leaving the "
+            "area (POSREP/DEFREP/CHANGEREP format). Mandatory versions of this system type "
+            "also apply in TSS Off Ushant (OUESSREP) and TSS Off Casquets (MANCHEREP) - both "
+            "outside this tool's Dover Strait scope and without their own coordinates in the "
+            "source ADP texts, so not geometrically checked here.\n"
+        )
         datei.write("\n")
 
 
