@@ -115,6 +115,12 @@ def frage_schiffsdaten():
 # Schiffstypen, die als "Tanker" im Sinne von Nur_Tanker gelten
 TANKER_TYPEN = {"Tanker", "Chemical tanker", "Gas tanker", "LNG tanker"}
 
+# UK MAREP vorübergehend ausgeblendet: soll eigentlich über eigene Gebiete (mit Geometrie)
+# abgebildet werden statt als pauschaler Hinweis, dafür fehlen aber noch ADP-Daten für die
+# angrenzenden Gebiete (OUESSREP/MANCHEREP) - werden voraussichtlich in ~2 Wochen nachgereicht.
+# Wieder auf True stellen, sobald diese Gebiete eingepflegt sind.
+UK_MAREP_AKTIV = False
+
 # Baut eine Kreis-Geometrie mit echtem Radius in nautischen Meilen um (lon, lat) -
 # z.B. fuer Dover VTS / Ramsgate (3nm- bzw. 2.5nm-Melde-Kreis um die Hafeneinfahrt).
 #
@@ -355,7 +361,7 @@ if len(ergebnisse) == 0:
 # analog zur "NACHDRUECKLICH ERMUTIGT"-Formulierung im Originaltext. Gilt fuer Handelsschiffe
 # ab 300GT. MANCHEREP/OUESSREP sind die verpflichtenden Versionen ausserhalb Dover Strait -
 # ohne eigene Koordinaten in den vorliegenden ADP-Texten, daher nur erwaehnt statt geprueft.
-if Schiffsdaten['gt'] >= 300:
+if UK_MAREP_AKTIV and Schiffsdaten['gt'] >= 300:
     print("   VOLUNTARY: UK MAREP")
     print("   This is a voluntary reporting system (not mandatory in this area, since")
     print("   CALDOVREP already covers the mandatory equivalent for the Dover Strait).")
@@ -391,7 +397,7 @@ with open("ergebnis.txt", "w") as datei:
             datei.write(f"LNG note:      {e['lng_hinweis']}\n")
         datei.write("\n")
 
-    if Schiffsdaten['gt'] >= 300:
+    if UK_MAREP_AKTIV and Schiffsdaten['gt'] >= 300:
         datei.write("VOLUNTARY: UK MAREP\n")
         datei.write(
             "This is a voluntary reporting system (not mandatory in this area, since "

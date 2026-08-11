@@ -188,6 +188,26 @@ umgesetzt" unten).
   nicht (fehlende Ladungsbedingung), (3) Stückgutfrachter ohne Gefahrgut löst nur
   CALDOVREP aus, SURNAV Gris-Nez korrekt nicht.
 
+## 2026-08-11 – UK MAREP ausgeblendet, Output komplett auf Englisch
+
+- **UK MAREP vorübergehend deaktiviert** (`main.py`, neuer Schalter `UK_MAREP_AKTIV = False`):
+  Marc will das System stattdessen über eigene Gebiete mit echter Geometrie abbilden
+  (analog zu SURNAV/WETREP), dafür fehlen aber noch ADP-Daten für die angrenzenden
+  Gebiete (OUESSREP/MANCHEREP), die er voraussichtlich in ~2 Wochen bekommt. Code bleibt
+  erhalten (nicht gelöscht), einfach `UK_MAREP_AKTIV = True` setzen, sobald die Daten da
+  sind.
+- **CSV-Ausgabespalten ins Englische übersetzt** (`reporting_points.csv`: `Meldeinhalt`,
+  `Dauerpflicht`, `Faehre_Hinweis`, `LNG_Hinweis` – 25 Zellen über 11 Gebiete): Die
+  Konsolen-/Interview-Eingabe läuft bereits auf Englisch, das Ergebnis (`ergebnis.txt`
+  und Konsole) war aber noch auf Deutsch, weil es direkt aus diesen CSV-Spalten kommt.
+  Jetzt einheitlich Englisch. Die `Info`- und `Ladungsbedingung`-Spalten bleiben bewusst
+  Deutsch – die tauchen nie im Programm-Output auf, sondern sind reine Doku beim
+  CSV-Pflegen, und lassen sich so leichter mit den deutschen ADP-Original-Quelltexten
+  abgleichen.
+- **Getestet**: Tanker mit Gefahrgut+Schweröl bis Dover-Kreis-Zentrum (CALDOVREP → WETREP
+  → Dover VTS) – komplette Ausgabe jetzt durchgängig Englisch, kein UK-MAREP-Hinweis mehr
+  am Ende.
+
 ## 2026-08-02 (Teil 2) – Schiffsspezifische Filterung
 
 - **Schiffsdaten-Abfrage am Programmstart** (`main.py`, `frage_schiffsdaten()`): Vor der
