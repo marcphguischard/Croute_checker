@@ -3,6 +3,60 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-05 (Teil 2) – Alle 11 Diskrepanzen aus dem ADP-Rohtext-Abgleich behoben
+
+Marc hat nach kurzer Rückfrage zu zwei echten Logikfragen (Details unten) grünes Licht
+für alle 11 gefundenen Diskrepanzen gegeben (siehe Eintrag "2026-08-30" für die
+ursprüngliche Liste).
+
+- **#1 CALDOVREP GT-Ausnahme ergänzt**: Neue Interviewfrage "At anchor within the Dover
+  Strait TSS or its Inshore Traffic Zones (ITZs)" als dritter Ausnahmegrund (neben
+  eingeschränkter Manövrierfähigkeit/defekten Navigationshilfen). "Not under command"
+  bleibt bewusst ausgeklammert (nicht planbar, siehe Code-Kommentar). Mit Testfall
+  bestätigt: GT<300 + "at anchor in TSS" = Ja löst CALDOVREP jetzt korrekt aus,
+  ohne diese Ausnahme weiterhin nicht.
+- **#2 CALDOVREP-Kanal jetzt richtungsabhängig** (`bestimme_richtung()`, neue CSV-Spalte
+  `Frequenz_SW_Bound`): Berechnet die echten Ein-/Austrittspunkte der Route mit dem
+  CALDOVREP-Gebiet (nicht nur ersten/letzten Wegpunkt der Gesamtroute, da davor/danach
+  beliebig viel Route liegen kann) und vergleicht deren Reihenfolge *entlang der Route*
+  (`LineString.project()`) statt sich auf die von Shapely bei `intersection()`
+  zurückgegebene Teile-Reihenfolge zu verlassen, die die Fahrtrichtung nicht
+  zuverlässig widerspiegelt. Nordostgehend -> Ch13 (Gris-Nez Traffic), südwestgehend ->
+  Ch11 (Channel VTS). Mit Testfall in beide Richtungen bestätigt (identische Route,
+  Wegpunkte vertauscht).
+- **#5 CALDOVREP/SURNAV 5h-vs-6h nicht "aufgelöst", sondern als das dargestellt, was es
+  ist**: Marcs fachliche Einordnung: es handelt sich nicht um einen Widerspruch,
+  sondern um **zwei unabhängige, gleichrangige Meldepflichten** (CALDOVREP-eigene
+  MRCC-Meldung mit 5h/6h, SEPARAT von der allgemeinen SURNAV-Meldung mit 6h/6h - auch
+  wenn beide ggf. beim selben MRCC ankommen). CALDOVREP-Text entsprechend präzisiert,
+  keine Zahl "korrigiert" oder verworfen, stattdessen expliziter Hinweis, dass es sich
+  um eine separate, parallel geltende Pflicht handelt.
+- **#3 Boulogne-Copy-Paste-Fehler behoben**: Der fälschlich aus dem CALAIS-Dokument
+  übernommene Satz (Meridian-Regel bei Calais Approche Lt buoy, gilt dort gar nicht)
+  ersetzt durch die tatsächliche Boulogne-Pflicht ("vessels carrying
+  hydrocarbons/dangerous substances must contact Boulogne Port before entering the
+  approach channel..."). Mit Testfall bestätigt.
+- **#4 SURNAV-Meldezeitpunkt**: war durch die S-127-`Notice_Time`-Spalten aus der
+  vorherigen Session bereits abgedeckt (6h/6h erscheint jetzt in der "Notice:"-Zeile) -
+  keine weitere Änderung nötig, nur verifiziert.
+- **#6 Dunkirk VTS 12h-ETA-Schritt ergänzt** (Meldeinhalt + Notice_Time_Hours
+  "48,2" -> "48,12,2").
+- **#7 Dover VTS 2h-Pilot-Ordering-Meldung ergänzt** (Meldeinhalt + Notice_Time_Hours
+  "1" -> "2,1"), zusätzlich zur bereits vorhandenen 1h-VTS-Meldung.
+- **#8 Dover VTS Pilotage Incident Report ergänzt** (Dauerpflicht) - Unfall-/Beinahe-
+  Unfall-Meldepflicht analog zu SURNAV/CALDOVREP.
+- **#9 Calais VTS SURNAV-Zusatzwache ergänzt** (Dauerpflicht: Ch13 Gris-Nez während
+  Transit Pas-de-Calais-TSS -> Calais-VTS-Gebiet) - war bei Dunkirk VTS bereits korrekt
+  vorhanden, bei Calais VTS gefehlt.
+- **#10 Dunkirk VTS richtungsabhängige Zuständigkeit ergänzt** (Dauerpflicht: DW10/DW24
+  Lt buoy - Koordinaten nicht im Text, daher nur als Hinweistext, nicht geometrisch
+  geprüft).
+- **#11 Dunkirk VTS Wartebereich-Meldezeitpunkte ergänzt** (Dauerpflicht: 2h/1h vor ETA
+  am Lotsenversetzpunkt).
+- **Getestet**: 8 gezielte Szenarien - CALDOVREP GT-Ausnahme (positiv+negativ), CALDOVREP
+  Richtung (NE+SW), Calais VTS, Dunkirk VTS, Boulogne, Dover VTS Inbound - alle
+  Textergänzungen und die neue Richtungslogik bestätigt korrekt.
+
 ## 2026-09-04/05 – Schiffsprofil & Datenstruktur an IHO S-127 angelehnt
 
 Umsetzung von `s127_implementierung_prompt.txt` (Marcs Vorgabe, Werte 1:1 aus

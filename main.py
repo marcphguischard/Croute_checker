@@ -219,11 +219,14 @@ def frage_schiffsdaten():
     sondertransport = frage_ja_nein("Restricted draught / special transport")
 
     # Zustands-Ausnahmen, die die 300GT-Schwelle bei CALDOVREP aushebeln koennen (siehe
-    # erfuellt_schiffskriterien()). "Not under command" wird bewusst NICHT gefragt, da das nicht
+    # erfuellt_schwellenwert()). "Not under command" wird bewusst NICHT gefragt, da das nicht
     # planbar ist (tritt unerwartet ein) - eingeschraenkte Manoevrierfaehigkeit kann dagegen auch
-    # planmaessig vorliegen (z.B. Schleppverband, Baggerarbeiten).
+    # planmaessig vorliegen (z.B. Schleppverband, Baggerarbeiten). "At anchor in der TSS/ihren
+    # ITZs" ist der dritte im ADP-Text genannte Ausnahmegrund (neben "not under command", das wie
+    # oben begruendet bewusst ausgelassen wird) und IST planbar/erfragbar.
     eingeschraenkt_manoevrierfaehig = frage_ja_nein("Restricted in ability to manoeuvre")
     defekte_navigationshilfen = frage_ja_nein("Defective navigational aids")
+    anker_in_tss = frage_ja_nein("At anchor within the Dover Strait TSS or its Inshore Traffic Zones (ITZs)")
 
     Schiffsdaten = {
         "schiffstyp": schiffstyp,
@@ -243,6 +246,7 @@ def frage_schiffsdaten():
         "sondertransport": sondertransport,
         "eingeschraenkt_manoevrierfaehig": eingeschraenkt_manoevrierfaehig,
         "defekte_navigationshilfen": defekte_navigationshilfen,
+        "anker_in_tss": anker_in_tss,
         "vessel_registry": vessel_registry,
         "in_ballast": in_ballast,
         "government_non_commercial": regierungsschiff,
@@ -313,11 +317,15 @@ def erfuellt_schwellenwert(daten, Schiffsdaten):
         return True
 
     # Bestehende CALDOVREP-Ausnahme bleibt erhalten: Schiffe unter der GT-Schwelle muessen
-    # trotzdem melden, wenn sie eingeschraenkt manoevrierfaehig sind oder defekte
-    # Navigationshilfen haben (siehe ADP Abs. 2). Gilt nur fuer GT-Schwellen.
+    # trotzdem melden, wenn sie eingeschraenkt manoevrierfaehig sind, defekte
+    # Navigationshilfen haben, oder in der TSS/ihren ITZs vor Anker liegen (ADP: "not under
+    # command or at anchor in the TSS or its ITZs" / "restricted in ability to manoeuvre" /
+    # "defective navigational aids" - "not under command" bewusst nicht erfragt, siehe
+    # frage_schiffsdaten()). Gilt nur fuer GT-Schwellen.
     if (merkmal == "gross_tonnage" and daten['gt_ausnahme'] == "Ja"
             and (Schiffsdaten['eingeschraenkt_manoevrierfaehig'] == "Yes"
-                 or Schiffsdaten['defekte_navigationshilfen'] == "Yes")):
+                 or Schiffsdaten['defekte_navigationshilfen'] == "Yes"
+                 or Schiffsdaten['anker_in_tss'] == "Yes")):
         return True
 
     return False
@@ -402,6 +410,10 @@ def baue_gebiete(df):
                 'punkte': [],
                 'typ': reihe['Typ'],
                 'frequenz': reihe['Frequenz'],
+                # Alternative Frequenz fuer suedwestgehenden Verkehr (nur CALDOVREP: Ch13
+                # Gris-Nez Traffic nordostgehend, Ch11 Channel VTS suedwestgehend) - leer bei
+                # allen anderen Gebieten, dann gilt immer 'frequenz'.
+                'frequenz_sw_bound': reihe['Frequenz_SW_Bound'] if pd.notna(reihe['Frequenz_SW_Bound']) else None,
                 # Bestehende Schiffs-Kriterien-Spalten (mit sinnvollen Standardwerten,
                 # falls in der CSV mal eine Zelle leer sein sollte)
                 'nur_tanker': reihe['Nur_Tanker'] if pd.notna(reihe['Nur_Tanker']) else "Nein",
@@ -529,6 +541,39 @@ def relationship_status_label(relationship_type):
         return "NOTE (not required)"
     return "REPORTING REQUIRED"
 
+# Bestimmt die Fahrtrichtung durch ein Gebiet (z.B. CALDOVREP), um richtungsabhaengige
+# Meldekanaele korrekt zu waehlen (Ch13 Gris-Nez Traffic nordostgehend, Ch11 Channel VTS
+# suedwestgehend). Berechnet dazu die echten Ein-/Austrittspunkte der Route mit dem
+# Gebiets-Rand (nicht nur erster/letzter Wegpunkt der Gesamtroute, da die Route vor/nach
+# der Strait noch beliebig weiterlaufen kann) und vergleicht deren Position entlang der
+# Route, um die tatsaechliche Reihenfolge (Ein- vor Austritt) sicherzustellen - die
+# Reihenfolge von (Multi-)Geometrie-Teilen, die Shapely bei intersection() zurueckgibt,
+# folgt naemlich nicht garantiert der Fahrtrichtung.
+# Rueckgabewert: "NE" (Laengengrad nimmt zu), "SW" (nimmt ab) oder None (nicht bestimmbar,
+# z.B. Route beruehrt das Gebiet nur in einem Punkt).
+def bestimme_richtung(testroute, gebiet_geometrie):
+    schnitt = gebiet_geometrie.intersection(testroute)
+    if schnitt.is_empty:
+        return None
+
+    geometrie_teile = list(schnitt.geoms) if hasattr(schnitt, "geoms") else [schnitt]
+    koordinaten = []
+    for teil in geometrie_teile:
+        if hasattr(teil, "coords"):
+            koordinaten.extend(teil.coords)
+
+    if len(koordinaten) < 2:
+        return None
+
+    koordinaten.sort(key=lambda koord: testroute.project(Point(koord)))
+    eintritt, austritt = koordinaten[0], koordinaten[-1]
+
+    if austritt[0] > eintritt[0]:
+        return "NE"
+    if austritt[0] < eintritt[0]:
+        return "SW"
+    return None
+
 # Schritt 4: Zusammenfassung der Schiffsdaten anzeigen
 zusammenfassung_schiff = (
     f"Checked for: {Schiffsdaten['schiffstyp']}, {Schiffsdaten['gt']:.0f} GT, "
@@ -583,7 +628,13 @@ for name, daten in gebiete.items():
         # Geometrische/situative Prüfung (s.o.) UND Schiffs-Kriterien-Prüfung: passen
         # GT/Gefahrgut/Tankertyp/Fahrtgebiet zum Schiff?
         if kreuzt and erfuellt_schiffskriterien(daten, Schiffsdaten):
-            freq = f"Ch {int(daten['frequenz'])}" if pd.notna(daten['frequenz']) else "see ADP"
+            # Richtungsabhaengige Frequenz (aktuell nur CALDOVREP: Ch13 nordostgehend,
+            # Ch11 suedwestgehend) - faellt auf die normale 'frequenz' zurueck, wenn das
+            # Gebiet keine Richtungsabhaengigkeit hat oder die Richtung nicht bestimmbar ist.
+            frequenz_wert = daten['frequenz']
+            if daten['frequenz_sw_bound'] and bestimme_richtung(testroute, geometrie) == "SW":
+                frequenz_wert = daten['frequenz_sw_bound']
+            freq = f"Ch {int(float(frequenz_wert))}" if pd.notna(frequenz_wert) else "see ADP"
             ist_faehre = Schiffsdaten['schiffstyp'] == "Ferry"
             ist_lng = Schiffsdaten['schiffstyp'] == "LNG tanker"
             status_label = relationship_status_label(daten['relationship_type'])
