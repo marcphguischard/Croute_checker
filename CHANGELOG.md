@@ -3,6 +3,122 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-04/05 – Schiffsprofil & Datenstruktur an IHO S-127 angelehnt
+
+Umsetzung von `s127_implementierung_prompt.txt` (Marcs Vorgabe, Werte 1:1 aus
+`s127_kategorien_uebersicht.md` / IHO S-127 Marine Traffic Management, Edition 1.0.0).
+Ziel laut Vorgabe: **keine vollständige S-127-Implementierung**, nur die dort markierten
+Kategorien als standardisierte Auswahllisten/Spalten übernehmen. Bestehende Funktionalität
+(RTZ/GPX-Import, Geometrieprüfung, Zielhafen-Erkennung) blieb wie gefordert unangetastet
+und wurde nach der Umstellung erneut getestet.
+
+- **Schiffsdaten-Interview umgestellt** (`main.py`, `frage_schiffsdaten()`):
+  - Schiffstyp: 17 standardisierte S-127-`categoryOfVessel`-Werte statt Freitext/eigener
+    Liste, **plus zwei Tool-Erweiterungen** (Code 18 "Ferry", 19 "LNG tanker") – S-127
+    selbst erlaubt das ("S100_Codelist, erweiterbar"). Ohne diese Erweiterung wären die
+    bereits bestehenden Fähren-/LNG-Sonderhinweise (Dover, Ramsgate, Dunkirk VTS) nicht
+    mehr abbildbar gewesen, da die offizielle Liste weder "Ferry" noch "LNG tanker" als
+    eigenen Typ kennt.
+  - Ladungstyp (`categoryOfCargo`, 9 Werte) ersetzt die bisherige separate
+    Ja/Nein-Frage zu Gefahrgut – "Gefahrgut an Bord" ergibt sich jetzt automatisch aus
+    der Auswahl "dangerous or hazardous".
+  - IMDG-Klasse(n) (`categoryOfDangerousOrHazardousCargo`, 21 Werte, Mehrfachauswahl
+    kommagetrennt) ersetzt die bisherige IMDG-Freitextabfrage – wird nur gefragt, wenn
+    Ladungstyp = "dangerous or hazardous".
+  - Neue Zahlenfelder: Length overall (LOA) und Tiefgang in Metern (bislang nicht
+    abgefragt, jetzt für die neue Ramsgate-Schwelle gebraucht, siehe unten).
+  - Neue Ja/Nein-/Auswahlfelder: Registrierung (domestic/foreign), Ballast-Status,
+    Regierungsschiff-Status (Kriegsschiff/Marinehilfsschiff/sonstiges Regierungsschiff im
+    nicht-kommerziellen Dienst – für die WETREP-Ausnahme, siehe unten).
+- **Generische Schwellenwert-Prüfung** (`erfuellt_schwellenwert()`) ersetzt die bisherigen
+  fest verdrahteten `GT < Min_GT` / `TDW < Min_TDW`-Vergleiche durch eine datengetriebene
+  Prüfung (`Threshold_Characteristic` + `Threshold_Operator` + `Threshold_Value` je
+  Gebiet, S-127 `comparisonOperator`). Die bestehende CALDOVREP-Ausnahme (GT<300 löst
+  trotzdem aus bei eingeschränkter Manövrierfähigkeit/defekten Navigationshilfen) bleibt
+  als Spezialfall erhalten, da sie sich nicht sauber als reiner Schwellenwert abbilden
+  lässt.
+- **Echte neue Fähigkeit dadurch**: Ramsgate hatte bisher **gar keine** Größen-Schwelle
+  (jedes Boot löste es geometrisch aus). Der ADP-Text nennt aber ">20m LOA" für die
+  nicht-lotsenpflichtige Meldekategorie – jetzt als `length_overall > 20m`
+  abgebildet (für Ramsgate Inbound UND Outbound). **Verhaltensänderung**, mit Testfällen
+  bestätigt: Boot mit LOA 15m löst Ramsgate nicht mehr aus, LOA 25m löst weiterhin aus.
+- **Regierungsschiff-Ausnahme generalisiert** (`Government_Vessel_Exempt`-Spalte, S-127
+  `categoryOfRelationship`-Gedanke): WETREP nimmt laut ADP-Text nicht nur Kriegsschiffe,
+  sondern *jedes* Regierungsschiff im nicht-kommerziellen Dienst aus – bisher gar nicht
+  abgebildet. Mit Testfall bestätigt: Kriegsschiff mit Schweröl-Ladung löst WETREP jetzt
+  korrekt nicht mehr aus (CALDOVREP/Dover VTS lösen weiterhin normal aus).
+- **CSV um 16 neue Spalten erweitert** (`reporting_points.csv`, für alle 11 Gebiete
+  befüllt): `Threshold_Characteristic/Operator/Value/Unit`, `Applicable_Vessel_Types`,
+  `Excluded_Vessel_Types`, `Government_Vessel_Exempt`, `Requires_Cargo_Type`,
+  `Requires_IMDG` (ersetzt `Gefahrgut_Pflicht` als Wahrheitsquelle – alte Spalte bleibt
+  zur Referenz stehen, wird aber nicht mehr gelesen), `Report_Types`,
+  `Notice_Time_Hours`/`Notice_Time_Text`, `Relationship_Type`, `Traffic_Flow`,
+  `Source_Type`/`Source_Reference`. Werte-Zuordnung pro Gebiet (z.B. welche
+  Meldungstypen/Vorlaufzeiten) basiert auf den bereits erfassten ADP-Inhalten, an ein
+  paar Stellen mit eigener, im Zweifel konservativer Einordnung (z.B. VTS-Meldungen als
+  generisches "Other Report", da S-127 keinen eigenen Code dafür hat) - im Code
+  dokumentiert.
+- **Ausgabe erweitert** (Konsole + `ergebnis.txt`): pro Treffer zusätzlich Report-Typ(en)
+  ausgeschrieben, Vorlaufzeit(en) als Satz ("Report required: 48h, 12h and 2h before
+  arrival"), Quellenangabe (`Source: ADP/ALRS Vol 6, ...`). Status-Zeile
+  ("REPORTING REQUIRED"/zukünftig auch "RECOMMENDED") jetzt aus `Relationship_Type`
+  abgeleitet statt hart codiert - aktuell bei allen aktiven Gebieten weiterhin
+  "REPORTING REQUIRED" (keine sichtbare Änderung), aber vorbereitet für später als
+  "recommended" markierte Gebiete.
+- **Nebenbei behobener Bug**: `parse_int_menge()` musste Zahlen über `float()` statt
+  direkt `int()` parsen - pandas liest eine CSV-Spalte, die (fast) nur eine einzelne Zahl
+  ohne Komma enthält (hier: `Excluded_Vessel_Types`, nur "10" bei WETREP), als
+  Float-Spalte ein ("10.0" statt "10"), was beim direkten `int()`-Parsen abstürzte.
+- **Getestet**: 4 Szenarien - (1) Tanker mit Gefahrgut+HFO bis Dover-Kreis
+  (CALDOVREP→WETREP→Dover VTS, alle neuen Ausgabefelder korrekt), (2) kleines Boot
+  (LOA 15m) zu Ramsgate ohne Treffer, (3) gleiche Route mit LOA 25m mit Ramsgate-Treffer,
+  (4) Kriegsschiff mit HFO-Ladung ohne WETREP-Treffer (Regierungsschiff-Ausnahme).
+- **Bewusst NICHT umgesetzt** (Scope-Grenze laut Vorgabe): volles S-127-Schema/GML/Feature
+  Catalogue, `logicalConnectives` als generisches UND/ODER (die bestehende
+  `Tanker_Oder_Gefahrgut`-Spalte deckt den einzigen aktuell vorkommenden ODER-Fall bereits
+  ab), `Traffic_Flow` fließt bewusst nicht in die Trigger-Logik ein (rein dokumentarisch -
+  die tatsächliche Inbound/Outbound-Erkennung läuft weiterhin über `Pflicht_Typ`).
+- Die konkreten Werte in den neuen Spalten sind eine erste, plausible Befüllung aus den
+  bereits vorliegenden ADP-Daten - Marc prüft/ergänzt bei Bedarf (analog zu den
+  Platzhaltern bei der ersten CSV-Erweiterung).
+
+## 2026-08-30 – ADP-Rohtext-Abgleich (Cross-Check gegen Primärquellen)
+
+Marc hat die vollständigen Original-ADP-PDFs (11 Dokumente: Boulogne, Calais, CALDOVREP,
+Dover, Dunkirk, Folkestone, Ramsgate, Rye, SURNAV, UK MAREP, WETREP) zur Verfügung
+gestellt, um zu prüfen, ob bei der ursprünglichen Erfassung aus einer gekürzten Vorlage
+Nuancen verloren gegangen sind. Reine Analyse, **keine Code-/CSV-Änderung** in dieser
+Session (auf Marcs ausdrücklichen Wunsch: "nicht eigenständig etwas vom Skript ändern").
+
+- **Bestätigt korrekt** (punktgenau gegen Originalkoordinaten geprüft): Calais VTS
+  (9 Punkte), Dunkirk VTS (19 Punkte), Ramsgate/Point Romeo (Mittelpunkt-Berechnung),
+  SURNAV-Gris-Nez-Grenzlinie, Boulogne-Radius (4sm ist im Volltext tatsächlich explizit
+  genannt, war keine reine Annahme). Folkestone korrekt nicht erfasst (keine Meldepflicht
+  im Quelltext).
+- **Gefundene Diskrepanzen** (der Vollständigkeit halber hier festgehalten, Marc hat noch
+  nicht entschieden, was davon übernommen wird):
+  1. CALDOVREP GT-Ausnahme unvollständig: "at anchor in the TSS/ITZs" als dritte
+     Ausnahme-Bedingung fehlt (nur eingeschränkte Manövrierfähigkeit/defekte
+     Navigationshilfen sind abgebildet).
+  2. CALDOVREP-Kanal ist richtungsabhängig (Ch13 NE-bound / Ch11 SW-bound), Tool zeigt
+     bisher immer Ch13.
+  3. Boulogne `Dauerpflicht` enthält fälschlich einen Satz aus dem CALAIS-Dokument
+     (Meridian-Regel bei Calais Approche Lt buoy) - Copy-Paste-Fehler bei der
+     ursprünglichen Erfassung.
+  4. SURNAV: Meldezeitpunkt (6h vorher) fehlt komplett in der Ausgabe.
+  5. CALDOVREP nennt für die MRCC-Meldung 5h/6h, SURNAV nennt 6h/6h - Widerspruch im
+     Quellmaterial selbst, ungeklärt.
+  6. Dunkirk VTS: 12h-ETA-Meldeschritt fehlt (springt von 48h direkt auf 2h).
+  7. Dover VTS: separate 2h-"Pilot ordering"-Meldung (zusätzlich zur 1h-VTS-Meldung) fehlt.
+  8. Dover VTS: Pilotage Incident Report (Unfallmeldepflicht) nicht abgebildet.
+  9. Calais VTS: SURNAV-Zusatzwache (Ch13 Gris-Nez) fehlt (bei Dunkirk VTS korrekt vorhanden).
+  10. Dunkirk VTS: richtungsabhängige Zuständigkeit (DW10/DW24 Lt buoy) nicht abgebildet.
+  11. Dunkirk VTS: Wartebereich-Meldezeitpunkte (2h/1h vor ETA) nicht abgebildet.
+- **Nebenfund**: separates Extraktions-Paket von Prof. Denker (`source_manifest.json`)
+  bestätigt dieselbe CALDOVREP-Süd-/Westgrenzen-Lücke und nennt einen konkreten neuen
+  Anhaltspunkt dafür: "Royal Sovereign light tower" als möglicher fehlender Referenzpunkt
+  für die französische Küste - noch nicht verifiziert/übernommen.
+
 ## 2026-08-09 – Outbound-Meldepflichten, Fähren/LNG, GT-Ausnahme, Boulogne/Rye, UK MAREP
 
 Basiert auf einer vollständigen Wort-für-Wort-Erfassung aller ADP-Texte der Dover-Strait-
@@ -187,6 +303,23 @@ umgesetzt" unten).
   (2) Tanker ohne Gefahrgut/Schweröl löst CALDOVREP und SURNAV Gris-Nez aus, WETREP korrekt
   nicht (fehlende Ladungsbedingung), (3) Stückgutfrachter ohne Gefahrgut löst nur
   CALDOVREP aus, SURNAV Gris-Nez korrekt nicht.
+
+## 2026-08-11 (Teil 2) – GPX-Routenimport zusätzlich zu RTZ
+
+- **`lade_gpx_route()`** (`main.py`): Neuer Parser für Standard-GPX-1.1-Dateien
+  (`<rte><rtept lat="..." lon="..."/></rte>`), analog zum bestehenden RTZ-Parser. GPX hat
+  anders als RTZ keinen Pflicht-Routennamen und keinen Pflicht-Namen pro Wegpunkt – falls
+  `<name>` fehlt, wird ersatzweise der Dateiname bzw. "WP1", "WP2", ... verwendet.
+- **Routenauswahl-Menü zeigt jetzt `.rtz`- UND `.gpx`-Dateien** aus `routes/` gemeinsam
+  (alphabetisch sortiert), der passende Parser wird automatisch anhand der Dateiendung
+  gewählt.
+- **Getestet** mit `Testroute FRCER - FRDKK.gpx` (Marcs erste eigene Testroute, 10
+  Wegpunkte ohne Namen im GPX → korrekt als WP1–WP10 angezeigt): löst CALDOVREP, Dunkirk
+  VTS und SURNAV Gris-Nez korrekt aus.
+- CSV/GML wurden bewusst nicht unterstützt – GPX ist strukturell am nächsten an RTZ
+  (klare `lat`/`lon`-Attribute pro Punkt) und deutlich zuverlässiger zu parsen als KML
+  (Koordinaten meist als ein einzelner Text-Blob ohne Wegpunktnamen) oder GML (viele
+  uneinheitliche Schema-Varianten).
 
 ## 2026-08-11 – UK MAREP ausgeblendet, Output komplett auf Englisch
 
