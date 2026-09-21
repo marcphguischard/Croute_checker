@@ -3,6 +3,27 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-05 (Teil 3) – Gefahrgut-Frage von Ladungstyp entkoppelt
+
+Marc hat einen echten Logikfehler aus der letzten Session gefunden: "Gefahrgut an Bord"
+wurde aus dem Ladungstyp (`categoryOfCargo`) abgeleitet ("dangerous or hazardous" = Ja,
+alles andere = Nein). Das ist falsch - ein Schiff kann z.B. Bulk-Ladung UND zusätzlich
+Gefahrgut an Bord haben (die Ladungstyp-Kategorien schließen sich nicht gegenseitig mit
+"führt Gefahrgut" aus).
+
+- **Gefahrgut-Frage wieder eine eigene, unabhängige Ja/Nein-Frage** (`frage_schiffsdaten()`),
+  wie vor der S-127-Umstellung - nicht mehr aus dem Ladungstyp abgeleitet. IMDG-Klasse(n)
+  werden weiterhin nur bei "Gefahrgut = Ja" abgefragt, jetzt aber unabhängig davon, was bei
+  Ladungstyp gewählt wurde.
+- Ladungstyp (`categoryOfCargo`, 9 Werte) bleibt als separate Frage bestehen - beschreibt
+  weiterhin die Hauptladung, hat aber keinen Einfluss mehr auf die Gefahrgut-Logik.
+- Ungenutzte Konstante `DANGEROUS_CARGO_CODE` entfernt.
+- **Getestet**: Bulk carrier mit Ladungstyp "Bulk" UND Gefahrgut=Ja löst SURNAV jetzt
+  korrekt aus (über die bestehende Tanker-oder-Gefahrgut-Bedingung); dieselbe Route mit
+  Gefahrgut=Nein löst SURNAV korrekt nicht aus. Vor dem Fix wäre der erste Fall
+  fälschlich nicht ausgelöst worden, weil Ladungstyp≠"dangerous or hazardous" automatisch
+  Gefahrgut=Nein erzwungen hätte.
+
 ## 2026-09-05 (Teil 2) – Alle 11 Diskrepanzen aus dem ADP-Rohtext-Abgleich behoben
 
 Marc hat nach kurzer Rückfrage zu zwei echten Logikfragen (Details unten) grünes Licht

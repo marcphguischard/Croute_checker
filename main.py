@@ -111,7 +111,6 @@ CATEGORY_OF_CARGO = {
     8: "Heavy lift",
     9: "Ballast",
 }
-DANGEROUS_CARGO_CODE = 7
 
 # categoryOfShipReport - Meldungstypen (fuer Report_Types-Spalte)
 CATEGORY_OF_SHIP_REPORT = {
@@ -174,15 +173,19 @@ def frage_schiffsdaten():
     schiffstyp_code = frage_auswahl_code("Ship type", CATEGORY_OF_VESSEL)
     schiffstyp = CATEGORY_OF_VESSEL[schiffstyp_code]
 
-    # 2. Ladungstyp (categoryOfCargo)
+    # 2. Ladungstyp (categoryOfCargo) - beschreibt die Hauptladung. Bewusst UNABHAENGIG von
+    #    der Gefahrgut-Frage unten: ein Schiff kann z.B. Bulk-Ladung UND zusaetzlich
+    #    Gefahrgut an Bord haben, "dangerous or hazardous" als Ladungstyp ist nur EINE
+    #    mögliche Haupt-Einordnung, kein Ausschlusskriterium fuer die anderen Typen.
     ladungstyp_code = frage_auswahl_code("Cargo type", CATEGORY_OF_CARGO)
 
-    # 3. IMDG-Klasse(n) (categoryOfDangerousOrHazardousCargo) - nur bei Ladungstyp "dangerous or hazardous"
+    # 3. Gefahrgut an Bord: eigene, vom Ladungstyp unabhaengige Ja/Nein-Frage
+    gefahrgut = frage_ja_nein("Dangerous goods on board")
+
+    # 3b. IMDG-Klasse(n) (categoryOfDangerousOrHazardousCargo) - nur bei Gefahrgut = Ja
     imdg_codes = []
-    if ladungstyp_code == DANGEROUS_CARGO_CODE:
+    if gefahrgut == "Yes":
         imdg_codes = frage_auswahl_codes_mehrfach("IMDG class(es)", CATEGORY_OF_DANGEROUS_CARGO)
-    # "Gefahrgut an Bord" ergibt sich jetzt aus dem Ladungstyp statt einer eigenen Ja/Nein-Frage
-    gefahrgut = "Yes" if ladungstyp_code == DANGEROUS_CARGO_CODE else "No"
     imdg_klasse = ", ".join(CATEGORY_OF_DANGEROUS_CARGO[c] for c in imdg_codes)
 
     # 4. Tonnage/Abmessungen (mehrere Werte - WETREP nutzt tdw statt GT, Ramsgate nutzt LOA)

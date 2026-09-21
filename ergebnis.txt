@@ -1,7 +1,27 @@
 === ROUTE CHECKER - REPORTING OBLIGATIONS ===
 
-Created: 09.08.2026 16:02
-Route: Bremerhaven - Steenbank PS
-Waypoints checked: 9
-Checked for: Ferry, 200 GT, dangerous goods: No, international voyage: No
+Created: 11.09.2026 09:54
+Route: Wandelaar PS - FRDKK PS
+Waypoints checked: 10
+Checked for: Container carrier, 26000 GT, dangerous goods: Yes, international voyage: Yes
+
+REPORTING REQUIRED: DS CALDOVREP
+Type:          MAREP
+Frequency:     Ch 13
+Action:        Report on Ch 13 to the responsible MRCC
+Report content: A: Ship name/call sign/IMO/MMSI. B: Date/time. C/D: Position or bearing+distance. E: Course. F: Speed. G: Port of departure. I: Port of destination+ETA. O: Draught. P: Cargo (+IMO quantity/class if dangerous goods). Q/R: Defects/damage/deficiencies. T: Contact for dangerous goods information. W: Number of persons. X: Bunker quantity (>5000t bunker oil) and navigational conditions.
+Continuous watch/duty: Additional report required if navigational conditions change (section Q/R). In the event of any accident within 50nm of the French coast: report IMMEDIATELY to the responsible MRCC. Report by VHF radiotelephony; when reporting to Channel VTS, AIS reporting is also possible.
+Report type(s): Position Report
+Notice:        Report 2nm before crossing the reporting line (NE-bound) or within VHF range of North Foreland (SW-bound). Vessels remaining in French territorial waters must also report to the MRCC 5h before entry / 6h before departure - this is a separate report to CROSS Gris-Nez under CALDOVREP, independent of the SURNAV report (see SURNAV Gris-Nez) that may apply in parallel for the same passage.
+Source:        ADP/ALRS Vol 6, United Kingdom and France - Dover Strait (CALDOVREP), Procedure (1)-(9)
+
+REPORTING REQUIRED: Dunkirk VTS
+Type:          VTS
+Frequency:     Ch 73
+Action:        Report on Ch 73 to the responsible MRCC
+Report content: 48h ETA via agent (the 12h ETA message addressed to the pilotage office must also be sent to the Harbour Master). 2h before entry on Ch73: ETA at Dyck/E12 Lt buoy or similar, draught, damage/deficiencies, ISPS if applicable. Ships not subject to compulsory pilotage 1h prior: deficiencies, max. draught, ETA breakwaters, mooring line requirements.
+Continuous watch/duty: Continuous listening watch on Ch73 within the regulated zone/access channels/discharge area. Ships subject to SURNAV: additionally maintain continuous watch on Gris-Nez Ch13 while transiting the Dover Strait TSS -> Dunkirk. Vessels approaching from the W should contact Dunkerque Ouest on passing DW10 Lt buoy; vessels approaching from the E bound for Port Ouest must report to both Dunkerque VTS and Dunkerque Ouest on passing DW24 Lt buoy (buoy positions not given in the source text - not checkable). LNG tankers: separate ETA chain (on departure from loading port + every 24h thereafter), contact Ch73+Ch72 2h before pilot boarding, 0.5nm exclusion zone around anchored LNG ships (geometry not specified in the source text - not checkable). Waiting area: vessels obliged to anchor there must contact Pilotage de Dunkerque on Ch72 2h before ETA at the pilot boarding place (or ASAP if leaving a port less than 2h away), confirming 1h before arrival, and maintain continuous watch on Ch72 (exact coordinates of the waiting area not given in the source text - not checkable).
+Report type(s): Other Report
+Notice:        Report required: 48h, 12h and 2h before arrival. LNG tankers follow a separate ETA chain (see LNG note).
+Source:        ADP/ALRS Vol 6, France - Dunkerque, Vessel Traffic Service, Procedure (1)-(11)
 
