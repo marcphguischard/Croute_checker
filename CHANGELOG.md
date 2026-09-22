@@ -3,6 +3,60 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-22 (Teil 2) – Phase 2: Web-Oberfläche mit Flask
+
+Aufbauend auf Phase 1 (route_checker-Paket): browserbasierte Bedienung für die
+Vergleichsstudie mit Nautikern, als zweite Bedienart neben der bestehenden
+Kommandozeile - beide nutzen dieselbe Prüf-Logik, keine Doppelpflege.
+
+**Neue Struktur:**
+- `web/app.py` - Flask-App mit vier Routen:
+  - `GET /` - Formular (Auswahllisten aus `route_checker.kategorien` generiert).
+  - `POST /check` - liest Formular + Datei-Upload, ruft `pruefe_route()` auf,
+    zeigt die Ergebnisseite. Fehler (fehlende/kaputte Datei, ungültige
+    Schiffsdaten, <2 Wegpunkte) → Flash-Meldung + Redirect zum Formular,
+    kein Stacktrace.
+  - `POST /download` - baut denselben Textbericht wie die CLI
+    (`erzeuge_textbericht()`) aus einem Hidden-Field-Repost der
+    Ergebnisseite und liefert ihn als `.txt`-Download. Bewusst ohne
+    Server-Session (mehrere gleichzeitige Nutzer:innen in der Studie sollen
+    sich nicht in die Quere kommen).
+  - `GET /api/areas` - alle 11 Meldegebiete als GeoJSON, für die Karte.
+- `web/templates/` (`base.html` mit Warnbanner auf jeder Seite, `form.html`,
+  `result.html` mit Leaflet-Karte) + `web/static/style.css` (bewusst hoher
+  Kontrast/große Schrift für Lesbarkeit auf einem Brückenlaptop).
+- CSV wird beim Start des Servers einmal geladen, nicht pro Anfrage.
+- Datei-Upload: max. 2 MB, nur im Speicher verarbeitet (nicht dauerhaft
+  gespeichert), über `defusedxml` geparst (aus Phase 1 übernommen).
+- Karte: Leaflet.js 1.9.4 (unpkg-CDN, mit geprüften SRI-Hashes) + OpenStreetMap.
+  Route als Linie mit Wegpunkt-Markern; alle Gebiete eingezeichnet, ausgelöste
+  grün hervorgehoben, Rest blass/gestrichelt; Klick zeigt Name/Kanal/Meldeinhalt.
+- Gut sichtbarer Hinweis auf jeder Seite: „Prototype for research purposes.
+  Not for navigational use. Always consult the official nautical publications."
+
+**Tests:** `tests/test_web.py` (8 Fälle, Flask-Test-Client) - Startseite lädt,
+Upload einer Testroute liefert dieselben Gebiete wie `pruefe_route()` direkt
+(keine hart codierte Erwartung), kaputte/falsch formatierte Datei und <2
+Wegpunkte liefern Fehlermeldungen statt 500er, `/api/areas` liefert gültiges
+GeoJSON für alle Gebiete. Zusammen mit Phase 1: **52/52 Tests grün.**
+
+**Manuell verifiziert:** `python3 -m flask --app web.app run` lokal
+gestartet (echter Dev-Server, nicht nur Test-Client) - Startseite und
+`/api/areas` antworten mit HTTP 200.
+
+**Nebenbei behoben:** `README.md` lag als UTF-16 statt UTF-8 vor (vermutlich
+historisch mit PowerShell-Redirection o.ä. entstanden) - beim Neuschreiben
+in dieser Session aufgefallen und auf UTF-8 umgestellt, damit die Datei auf
+GitHub korrekt dargestellt wird.
+
+**Bewusst noch nicht umgesetzt** (laut Auftrag, für spätere Phasen):
+Datenbank, Nutzerkonten, Community-Funktion, Hosting, PDF-Export. Die
+Struktur (eigenständiges `route_checker`-Paket, zustandslose `/download`-
+Route) lässt das aber zu.
+
+**Abnahme:** README.md und CHANGELOG.md aktualisiert, Git-Tag `v0.9-webui`
+gesetzt und gepusht.
+
 ## 2026-09-22 – Phase 1: Logik von der Bedienung getrennt, Tests angelegt
 
 Vorbereitung für die Web-Oberfläche der Vergleichsstudie (Bachelorarbeit): die
