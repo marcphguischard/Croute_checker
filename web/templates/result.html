@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Route Checker - Result{% endblock %}
+
+{% block content %}
+
+<div class="zusammenfassung">
+  {% if routen_name %}<p><strong>Route:</strong> {{ routen_name }} ({{ wegpunkte_mit_namen|length }} waypoints)</p>{% endif %}
+  <p>{{ zusammenfassung }}</p>
+</div>
+
+{% if ergebnisse %}
+  <table class="ergebnisse">
+    <thead>
+      <tr>
+        <th>Area</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Frequency</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in ergebnisse %}
+        <tr class="{% if 'REQUIRED' in e.status_label %}status-required{% else %}status-note{% endif %}">
+          <td>{{ e.gebiet }}</td>
+          <td>{{ e.status_label }}</td>
+          <td>{{ e.typ }}</td>
+          <td>{{ e.frequenz }}</td>
+          <td>{{ formatiere_action_zeile(e) }}</td>
+        </tr>
+        <tr class="details">
+          <td colspan="5">
+            {% if e.meldeinhalt %}<p><strong>Report content:</strong> {{ e.meldeinhalt }}</p>{% endif %}
+            {% if e.dauerpflicht %}<p><strong>Continuous watch/duty:</strong> {{ e.dauerpflicht }}</p>{% endif %}
+            {% if e.faehre_hinweis %}<p><strong>Ferry note:</strong> {{ e.faehre_hinweis }}</p>{% endif %}
+            {% if e.lng_hinweis %}<p><strong>LNG note:</strong> {{ e.lng_hinweis }}</p>{% endif %}
+            {% if e.report_typen_text %}<p><strong>Report type(s):</strong> {{ e.report_typen_text }}</p>{% endif %}
+            {% if e.vorlaufzeit_text %}<p><strong>Notice:</strong> {{ e.vorlaufzeit_text }}</p>{% endif %}
+            {% if e.source_reference %}<p><strong>Source:</strong> {{ e.source_reference }}</p>{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No reporting obligations found for this route.</p>
+{% endif %}
+
+{% if uk_hinweis %}
+  <div class="zusammenfassung">
+    <p><strong>{{ uk_hinweis.titel }}</strong></p>
+    <p>{{ uk_hinweis.text }}</p>
+  </div>
+{% endif %}
+
+<form action="{{ url_for('download') }}" method="post" class="download-form">
+  {% for key, value in formular_werte.items(multi=True) %}
+    <input type="hidden" name="{{ key }}" value="{{ value }}">
+  {% endfor %}
+  {% if routen_name %}<input type="hidden" name="routen_name" value="{{ routen_name }}">{% endif %}
+  {% for lon, lat in wegpunkte_fuer_repost %}
+    <input type="hidden" name="wp_lon" value="{{ lon }}">
+    <input type="hidden" name="wp_lat" value="{{ lat }}">
+  {% endfor %}
+  <button type="submit" class="button">Download report (.txt)</button>
+</form>
+
+<p><a href="{{ url_for('formular') }}">&larr; Check another route</a></p>
+
+{% endblock %}
