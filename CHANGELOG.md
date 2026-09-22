@@ -46,16 +46,28 @@ vorher (bis auf die unten genannten, bewusst gewollten Korrekturen).
    der CSV noch nicht vorhandene Spalte `Reporting_Station` befüllt ist. CSV
    selbst nicht verändert.
 
-**WICHTIGER FUND (kein neuer Fehler, durch Kleinkorrektur 4 aufgedeckt):** Das
-WETREP-Polygon in `reporting_points.csv` ist geometrisch ungültig
-(Selbstüberschneidung bei ca. 5,08°W/52,17°N, zwischen den Kanal-Punkten „s"/
-„t" und den Punkten vor Irland). Dadurch kann WETREP in seltenen Fällen für
-Tankschiffe auf Routen auslösen, die geometrisch gar nicht im eigentlich
-gemeinten Gebiet liegen (z.B. Testroute A2 „offener Kanal" – dort greift die
-Meldepflicht aktuell nur deshalb nicht, weil A2 mit einem Nicht-Tankschiff
-getestet wird). Für die 18 Plausibilitätsfälle aus dem Testprotokoll hat das
-keine Auswirkung, sollte aber vor der Nutzung in der Studie separat behoben
-werden (CSV-Koordinaten der WETREP-Zeile prüfen/korrigieren).
+**WICHTIGER FUND, geprüft und geklärt (kein neuer Fehler, durch Kleinkorrektur 4
+aufgedeckt):** Das WETREP-Polygon in `reporting_points.csv` ist geometrisch
+ungültig (Selbstüberschneidung bei ca. 5,08°W/52,17°N, zwischen Kante t→u
+(Kanal-Punkt bei Dover → SW-Irland) und Kante v→w (Süd- → Nord-Irische See)).
+Marc hat das WETREP-ADP-Originaldokument nachgereicht - Abgleich aller 24
+Randpunkte (a-x) zeigt: **die CSV-Koordinaten sind zu 100% korrekt**, jeder
+einzelne Punkt (inkl. der Ost/West-Vorzeichen bei den Kanal-Punkten s/t)
+stimmt exakt mit dem ADP-Text überein. Kein Übertragungsfehler.
+
+Ursache ist stattdessen eine geometrische Modellierungsgrenze: das Tool
+verbindet alle 24 Randpunkte als EINEN einfachen, geraden Linienzug
+(a→b→...→x→a). Der ADP-Text verweist auf ein Diagramm ("See diagram WETREP -
+WEST EUROPEAN TANKER REPORTING SYSTEM"), das dem Tool nicht vorliegt - die
+tatsächliche Gebietsgrenze folgt vermutlich keiner geraden Linie zwischen den
+weit auseinanderliegenden Punkten t (Kanal) und u (Irland). Auf Marcs
+Entscheidung ("wir halten uns an den ADPs und lassen es dann so") bleibt die
+CSV unverändert; die `is_valid`-Warnung bleibt als Hinweis aktiv. Dadurch kann
+WETREP in seltenen Fällen für Tankschiffe auf Routen auslösen, die geometrisch
+nicht im eigentlich gemeinten Gebiet liegen (z.B. Testroute A2 „offener
+Kanal" - dort greift die Meldepflicht aktuell nur deshalb nicht, weil A2 mit
+einem Nicht-Tankschiff getestet wird). Für die 18 Plausibilitätsfälle aus dem
+Testprotokoll hat das keine Auswirkung.
 
 **Tests (`tests/`, `python3 -m pytest`, 44 Fälle, alle grün):**
 - `test_geometrie.py` (5): Kreisgeometrie (2,9nm innerhalb/3,1nm außerhalb),
