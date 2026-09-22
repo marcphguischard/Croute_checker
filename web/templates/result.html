@@ -2,12 +2,19 @@
 
 {% block title %}Route Checker - Result{% endblock %}
 
+{% block head %}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+{% endblock %}
+
 {% block content %}
 
 <div class="zusammenfassung">
   {% if routen_name %}<p><strong>Route:</strong> {{ routen_name }} ({{ wegpunkte_mit_namen|length }} waypoints)</p>{% endif %}
   <p>{{ zusammenfassung }}</p>
 </div>
+
+<div id="map"></div>
 
 {% if ergebnisse %}
   <table class="ergebnisse">
@@ -68,4 +75,64 @@
 
 <p><a href="{{ url_for('formular') }}">&larr; Check another route</a></p>
 
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    var wegpunkte = {{ wegpunkte_mit_namen | tojson }};  // [[lon, lat, name], ...]
+    var ausgeloesteGebiete = {{ ausgeloeste_gebiete | tojson }};
+
+    var karte = L.map("map");
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+      maxZoom: 18
+    }).addTo(karte);
+
+    // Route als Linie mit Wegpunkt-Markern
+    var routenPunkte = wegpunkte.map(function (wp) { return [wp[1], wp[0]]; });  // Leaflet: [lat, lon]
+    var routenLinie = L.polyline(routenPunkte, { color: "#0b4d8f", weight: 3 }).addTo(karte);
+    wegpunkte.forEach(function (wp) {
+      L.circleMarker([wp[1], wp[0]], { radius: 5, color: "#0b4d8f", fillOpacity: 1 })
+        .bindPopup(wp[2] || "Waypoint")
+        .addTo(karte);
+    });
+
+    var grenzen = routenLinie.getBounds();
+
+    // Alle Meldegebiete einzeichnen (ausgeloeste hervorgehoben, Rest blass)
+    fetch("{{ url_for('api_areas') }}")
+      .then(function (resp) { return resp.json(); })
+      .then(function (geojson) {
+        var gebietsLayer = L.geoJSON(geojson, {
+          style: function (feature) {
+            var ausgeloest = ausgeloesteGebiete.indexOf(feature.properties.name) !== -1;
+            return ausgeloest
+              ? { color: "#2f7d2f", weight: 2, fillOpacity: 0.25 }
+              : { color: "#999", weight: 1, fillOpacity: 0.05, dashArray: "4" };
+          },
+          pointToLayer: function (feature, latlng) {
+            // Kreis-Gebiete (Dover VTS, Ramsgate) kommen als Polygon-Naeherung,
+            // nicht als GeoJSON-Point - dieser Fall tritt hier nicht auf, aber
+            // als Absicherung: einfacher Marker.
+            return L.marker(latlng);
+          },
+          onEachFeature: function (feature, layer) {
+            var eigenschaften = feature.properties;
+            layer.bindPopup(
+              "<strong>" + eigenschaften.name + "</strong><br>" +
+              eigenschaften.typ + " - " + eigenschaften.frequenz + "<br>" +
+              (eigenschaften.meldeinhalt || "")
+            );
+          }
+        }).addTo(karte);
+      })
+      .catch(function () {
+        // Karte bleibt auch nutzbar, wenn /api/areas mal nicht erreichbar ist -
+        // die Route ist dann trotzdem sichtbar.
+      });
+
+    karte.fitBounds(grenzen.pad(0.2));
+  </script>
 {% endblock %}

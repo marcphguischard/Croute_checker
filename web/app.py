@@ -5,10 +5,15 @@
 # Start lokal: flask --app web.app run  (siehe README.md)
 from datetime import datetime
 
-from flask import Flask, Response, flash, redirect, render_template, request, url_for
+from flask import Flask, Response, flash, jsonify, redirect, render_template, request, url_for
 
-from route_checker.ausgabe import erzeuge_textbericht, formatiere_action_zeile, formatiere_schiffszusammenfassung
-from route_checker.gebiete import lade_gebiete
+from route_checker.ausgabe import (
+    erzeuge_textbericht,
+    formatiere_action_zeile,
+    formatiere_frequenz,
+    formatiere_schiffszusammenfassung,
+)
+from route_checker.gebiete import baue_geometrie_fuer_gebiet, geometrie_zu_geojson, lade_gebiete
 from route_checker.kategorien import (
     CATEGORY_OF_CARGO,
     CATEGORY_OF_DANGEROUS_CARGO,
@@ -101,6 +106,30 @@ def datei_zu_gross(_fehler):
     return redirect(url_for("formular")), 413
 
 
+# Liefert alle Meldegebiete als GeoJSON FeatureCollection - fuer die Karte auf
+# der Ergebnisseite. Enthaelt ALLE Gebiete (nicht nur die fuer die aktuelle
+# Route ausgeloesten), damit die Karte auch die nicht ausgeloesten blass
+# einzeichnen kann.
+@app.route("/api/areas")
+def api_areas():
+    features = []
+    for name, daten in GEBIETE.items():
+        geometrie = baue_geometrie_fuer_gebiet(daten, name)
+        if geometrie is None:
+            continue
+        features.append({
+            "type": "Feature",
+            "geometry": geometrie_zu_geojson(geometrie),
+            "properties": {
+                "name": name,
+                "typ": daten["typ"],
+                "frequenz": formatiere_frequenz(daten["frequenz"]),
+                "meldeinhalt": daten["meldeinhalt"],
+            },
+        })
+    return jsonify({"type": "FeatureCollection", "features": features})
+
+
 @app.route("/check", methods=["POST"])
 def pruefe():
     try:
@@ -134,6 +163,7 @@ def pruefe():
         routen_name=routen_name,
         wegpunkte_mit_namen=wegpunkte_mit_namen,
         ergebnisse=ergebnisse,
+        ausgeloeste_gebiete=[e["gebiet"] for e in ergebnisse],
         uk_hinweis=uk_marep_hinweis(schiffsdaten),
         formatiere_action_zeile=formatiere_action_zeile,
         # Fuer den Download-Button (Hidden-Field-Repost, siehe result.html):
