@@ -1,0 +1,179 @@
+/* Bewusst einfach gehalten: grosse Schrift, hoher Kontrast, keine kleinen
+   Touch-Ziele - soll auch auf einem Brueckenlaptop mit Sonnenlicht auf dem
+   Bildschirm gut lesbar/bedienbar sein. */
+
+:root {
+  --schrift: 18px;
+  --vordergrund: #111;
+  --hintergrund: #fff;
+  --rand: #333;
+  --akzent: #0b4d8f;
+  --warnung-hintergrund: #fff3cd;
+  --warnung-rand: #a67c00;
+  --fehler-hintergrund: #fbe4e4;
+  --fehler-rand: #b30000;
+  --ausgeloest-hintergrund: #e4f3e4;
+  --ausgeloest-rand: #2f7d2f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: var(--schrift);
+  color: var(--vordergrund);
+  background: var(--hintergrund);
+  margin: 0;
+  padding: 0 1rem 3rem;
+  line-height: 1.4;
+}
+
+.banner {
+  background: var(--warnung-hintergrund);
+  border-bottom: 3px solid var(--warnung-rand);
+  color: #4a3800;
+  padding: 0.75rem 1rem;
+  margin: 0 -1rem 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.site-header h1 {
+  margin: 0 0 1rem;
+}
+
+.site-header a {
+  color: var(--vordergrund);
+  text-decoration: none;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+fieldset {
+  border: 2px solid var(--rand);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+legend {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 0 0.5rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+select,
+input[type="number"],
+input[type="file"] {
+  font-size: var(--schrift);
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 480px;
+  border: 2px solid var(--rand);
+  border-radius: 4px;
+  background: var(--hintergrund);
+  color: var(--vordergrund);
+}
+
+select[multiple] {
+  max-width: 480px;
+}
+
+.hint {
+  font-size: 0.85em;
+  color: #555;
+  margin: 0.3rem 0 0;
+}
+
+button[type="submit"],
+.button {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  background: var(--akzent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover,
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.errors {
+  background: var(--fehler-hintergrund);
+  border: 2px solid var(--fehler-rand);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: #5c0000;
+}
+
+.errors p {
+  margin: 0.25rem 0;
+}
+
+table.ergebnisse {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+table.ergebnisse th,
+table.ergebnisse td {
+  border: 1px solid var(--rand);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+table.ergebnisse th {
+  background: #eee;
+}
+
+.status-required {
+  background: var(--ausgeloest-hintergrund);
+}
+
+.status-note {
+  background: #f0f0f0;
+}
+
+.zusammenfassung {
+  background: #f5f5f5;
+  border: 2px solid var(--rand);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+#map {
+  height: 500px;
+  width: 100%;
+  border: 2px solid var(--rand);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --schrift: 16px;
+  }
+}

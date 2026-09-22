@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Route Checker - Ship data{% endblock %}
+
+{% block content %}
+{% macro yesno(name, label, default="No") %}
+  <div class="field">
+    <label for="{{ name }}">{{ label }}</label>
+    <select name="{{ name }}" id="{{ name }}" required>
+      <option value="No" {% if default == "No" %}selected{% endif %}>No</option>
+      <option value="Yes" {% if default == "Yes" %}selected{% endif %}>Yes</option>
+    </select>
+  </div>
+{% endmacro %}
+
+<form action="/check" method="post" enctype="multipart/form-data">
+
+  <fieldset>
+    <legend>Vessel</legend>
+
+    <div class="field">
+      <label for="schiffstyp_code">Ship type</label>
+      <select name="schiffstyp_code" id="schiffstyp_code" required>
+        {% for code, label in vessel_types.items() %}
+          <option value="{{ code }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="gt">Gross tonnage (GT)</label>
+      <input type="number" name="gt" id="gt" min="0" step="any" required>
+    </div>
+
+    <div class="field">
+      <label for="tdw">Deadweight (tdw)</label>
+      <input type="number" name="tdw" id="tdw" min="0" step="any" required>
+    </div>
+
+    <div class="field">
+      <label for="loa">Length overall (LOA), metres</label>
+      <input type="number" name="loa" id="loa" min="0" step="any" required>
+    </div>
+
+    <div class="field">
+      <label for="draught">Draught, metres</label>
+      <input type="number" name="draught" id="draught" min="0" step="any" required>
+    </div>
+
+    <div class="field">
+      <label for="vessel_registry">Vessel registry</label>
+      <select name="vessel_registry" id="vessel_registry" required>
+        <option value="domestic">Domestic</option>
+        <option value="foreign">Foreign</option>
+      </select>
+    </div>
+
+    {{ yesno("in_ballast", "Vessel in ballast") }}
+    {{ yesno("government_non_commercial", "Warship / naval auxiliary / other government-owned vessel in non-commercial service") }}
+    {{ yesno("internationale_fahrt", "International voyage") }}
+
+    <div class="field">
+      <label for="personen_an_bord">Number of persons on board</label>
+      <input type="number" name="personen_an_bord" id="personen_an_bord" min="0" step="1" required>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Cargo &amp; dangerous goods</legend>
+
+    <div class="field">
+      <label for="cargo_code">Cargo type</label>
+      <select name="cargo_code" id="cargo_code" required>
+        {% for code, label in cargo_types.items() %}
+          <option value="{{ code }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="gefahrgut">Dangerous goods on board</label>
+      <select name="gefahrgut" id="gefahrgut" required onchange="toggleImdg()">
+        <option value="No" selected>No</option>
+        <option value="Yes">Yes</option>
+      </select>
+    </div>
+
+    <div class="field" id="imdg_field" hidden>
+      <label for="imdg_codes">IMDG class(es)</label>
+      <select name="imdg_codes" id="imdg_codes" multiple size="6">
+        {% for code, label in dangerous_cargo_types.items() %}
+          <option value="{{ code }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+      <p class="hint">Hold Ctrl (Windows) / Cmd (Mac) to select more than one.</p>
+    </div>
+
+    {{ yesno("schweroel_ladung", "Heavy fuel oil cargo (density &gt;900kg/m³ at 15°C), heavy fuel (density &gt;900kg/m³ or viscosity &gt;180mm²/s at 50°C), or bitumen/tar on board") }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Status</legend>
+    {{ yesno("sondertransport", "Restricted draught / special transport") }}
+    {{ yesno("eingeschraenkt_manoevrierfaehig", "Restricted in ability to manoeuvre") }}
+    {{ yesno("defekte_navigationshilfen", "Defective navigational aids") }}
+    {{ yesno("anker_in_tss", "At anchor within the Dover Strait TSS or its Inshore Traffic Zones (ITZs)") }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Route</legend>
+    <div class="field">
+      <label for="route_file">Route file (.rtz or .gpx, max 2 MB)</label>
+      <input type="file" name="route_file" id="route_file" accept=".rtz,.gpx" required>
+    </div>
+  </fieldset>
+
+  <button type="submit">Check route</button>
+</form>
+
+<script>
+  function toggleImdg() {
+    var gefahrgut = document.getElementById("gefahrgut").value;
+    var feld = document.getElementById("imdg_field");
+    feld.hidden = (gefahrgut !== "Yes");
+  }
+  toggleImdg();
+</script>
+{% endblock %}
