@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll A4 - durch Dunkirk VTS" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="51.02" lon="2.0" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="51.05" lon="2.2" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="51.06" lon="2.4" /></waypoint>
+  </waypoints>
+</route>

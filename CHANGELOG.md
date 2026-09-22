@@ -3,6 +3,97 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-22 – Phase 1: Logik von der Bedienung getrennt, Tests angelegt
+
+Vorbereitung für die Web-Oberfläche der Vergleichsstudie (Bachelorarbeit): die
+fachliche Prüf-Logik aus main.py in ein eigenständiges, testbares Paket
+`route_checker/` verschoben, ohne das Verhalten zu ändern. `main.py` ruft nur
+noch `cli.py` auf; `python3 main.py` verhält sich für den Nutzer identisch wie
+vorher (bis auf die unten genannten, bewusst gewollten Korrekturen).
+
+**Neue Struktur:**
+- `route_checker/kategorien.py` – S-127-Kategorien-Dicts (unverändert übernommen).
+- `route_checker/routen_import.py` – `lade_rtz_route`/`lade_gpx_route`, jetzt über
+  `defusedxml` statt `xml.etree.ElementTree` (schützt vor präparierten XML-Dateien,
+  wichtig für den Datei-Upload in Phase 2); plus `lade_rtz_route_aus_datei`/
+  `lade_gpx_route_aus_datei` für Uploads und `RouteImportError` für verständliche
+  Fehlermeldungen statt Absturz.
+- `route_checker/gebiete.py` – CSV-Einlesen, Geometrie-Aufbau (Kreis/Polygon/
+  LineString), `lade_gebiete()`.
+- `route_checker/pruefung.py` – Schwellenwert- und Schiffskriterien-Prüfung, neue
+  zentrale, reine Funktion `pruefe_route(Schiffsdaten, wegpunkte, gebiete)`.
+- `route_checker/ausgabe.py` – Formatierfunktionen + `erzeuge_textbericht()`
+  (wiederverwendbar für CLI-Datei und späteren Web-Download-Button).
+- `cli.py` – bisherige interaktive Abfrage (`frage_*`-Funktionen) + Konsolen-
+  ausgabe, ruft nur noch das `route_checker`-Paket auf.
+- `main.py` – auf einen 2-Zeiler reduziert (`from cli import main; main()`).
+
+**Sechs Kleinkorrekturen aus dem Auftrag:**
+1. Doppelter `import datetime` (überschrieb den `from datetime import datetime`
+   von oben) entfernt, einheitlich `from datetime import datetime`.
+2. `ergebnis.txt` wird jetzt mit `encoding="utf-8"` geschrieben (vorher unter
+   Windows Absturzgefahr bei Sonderzeichen wie „³"/„°" in den Fragetexten).
+3. Weniger als 2 Wegpunkte (manuelle Eingabe oder Datei) → verständliche
+   `RouteImportError`-Meldung statt Absturz (`LineString([...])`).
+4. Polygone werden nach dem Bauen auf `is_valid` geprüft; bei Ungültigkeit wird
+   gewarnt (mit Gebietsname), OHNE automatisch zu reparieren.
+5. „see ADP" (Fallback-Frequenztext) bleibt bewusst unverändert (Rückfrage/
+   Antwort im Zuge des Umbaus). Nur „source ADP texts" im UK-MAREP-Hinweistext
+   wurde zu „source documents" geändert.
+6. Die „Action:"-Zeile lautet jetzt `Report on {freq}` statt `Report on {freq}
+   to the responsible MRCC` (fachlich falsch für Hafen-VTS, die keine MRCC
+   sind) – ergänzt um `to {reporting_station}`, falls die optionale, aktuell in
+   der CSV noch nicht vorhandene Spalte `Reporting_Station` befüllt ist. CSV
+   selbst nicht verändert.
+
+**WICHTIGER FUND (kein neuer Fehler, durch Kleinkorrektur 4 aufgedeckt):** Das
+WETREP-Polygon in `reporting_points.csv` ist geometrisch ungültig
+(Selbstüberschneidung bei ca. 5,08°W/52,17°N, zwischen den Kanal-Punkten „s"/
+„t" und den Punkten vor Irland). Dadurch kann WETREP in seltenen Fällen für
+Tankschiffe auf Routen auslösen, die geometrisch gar nicht im eigentlich
+gemeinten Gebiet liegen (z.B. Testroute A2 „offener Kanal" – dort greift die
+Meldepflicht aktuell nur deshalb nicht, weil A2 mit einem Nicht-Tankschiff
+getestet wird). Für die 18 Plausibilitätsfälle aus dem Testprotokoll hat das
+keine Auswirkung, sollte aber vor der Nutzung in der Studie separat behoben
+werden (CSV-Koordinaten der WETREP-Zeile prüfen/korrigieren).
+
+**Tests (`tests/`, `python3 -m pytest`, 44 Fälle, alle grün):**
+- `test_geometrie.py` (5): Kreisgeometrie (2,9nm innerhalb/3,1nm außerhalb),
+  `bestimme_richtung` (NE/SW/nicht bestimmbar).
+- `test_schwellenwert.py` (18): jeder `THRESHOLD_VERGLEICH`-Operator, die
+  CALDOVREP-Ausnahme unter 300GT (alle drei Ausnahmegründe einzeln + Kontrolle
+  ohne `gt_ausnahme`-Flag), kein Schwellenwert → True.
+- `test_plausibilitaet.py` (18 + 2 Meldeinhalt-Hinweise): alle 18 Fälle aus
+  `testprotokoll_plausibilitaet.txt` (A1–F2), Testrouten als RTZ-Dateien in
+  `tests/routes/`, erwartete Ergebnisse 1:1 aus dem Protokoll übernommen.
+  **Alle 16 geometrischen/logischen Fälle (A1–A5, B1–B3, C1–C5, D1–D3, F1–F2)
+  stimmen mit dem Protokoll überein - keine Abweichung.** Bei den zwei
+  Meldeinhalt-Plausibilitätsfällen (E2 SURNAV, E3 WETREP) sowie bei F2 gibt es
+  offene fachliche Punkte, siehe unten.
+- `requirements.txt`: `pandas==3.0.1`, `shapely==2.1.2`, `flask==3.1.3`,
+  `defusedxml==0.7.1`, `pytest==9.1.1` (tatsächlich installierte/getestete
+  Versionen, nicht die im Auftrag geschätzten).
+
+**Offene fachliche Punkte (nicht selbst entschieden):**
+- **E2 (SURNAV Meldeinhalt):** Das Testprotokoll prüft die SURNAV-FRANCE-
+  Buchstabencodes A,B,C,E,F,G,H,I,K,M,O,P,Q,U,X,Z. Der CSV-Meldeinhalt für
+  SURNAV ist aber Fließtext ohne Buchstaben-Codes - eine automatisierte
+  Buchstaben-Prüfung war nicht möglich, ohne deren Bedeutung zu erraten. Der
+  Test prüft nur, dass der Text vorhanden ist; der inhaltliche Soll-Ist-
+  Abgleich gegen die 16 Buchstaben bleibt offen.
+- **E3 (WETREP Meldeinhalt):** Das Protokoll erwartet, dass für einen Sailing
+  Plan NUR die Felder A,B,C,E,F,G,I,P,T,W,X erscheinen (nicht die reduzierten
+  Felder von Final/Deviation Report). Der CSV-Text listet aber alle Felder
+  aller drei WETREP-Berichtstypen als eine gemeinsame, undifferenzierte Liste
+  (inkl. Feld Q). Der Test prüft nur, dass die erwarteten Felder vorkommen
+  (notwendig, nicht hinreichend) - eine Differenzierung nach Berichtstyp
+  findet im Datenmodell aktuell nicht statt.
+- **F2 (Regierungsschiff-Ausnahme bei WETREP):** Das Protokoll nennt kein
+  `categoryOfVessel` für das Schiffsprofil. Der Test nutzt "Warship" - dadurch
+  greift bereits die Schiffstyp-Einschränkung von WETREP (nur Tanker/LNG-
+  Tanker), nicht spezifisch die `Government_Vessel_Exempt`-Ausnahme. Das
+  erwartete Ergebnis (keine WETREP-Pflicht) stimmt trotzdem.
+
 ## 2026-09-05 (Teil 3) – Gefahrgut-Frage von Ladungstyp entkoppelt
 
 Marc hat einen echten Logikfehler aus der letzten Session gefunden: "Gefahrgut an Bord"

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll C3/C4/C5 - WETREP Kanalbereich" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="51.3" lon="3.0" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="51.4" lon="3.3" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="51.9" lon="1.8" /></waypoint>
+    <waypoint id="4" name="WP4"><position lat="52.15" lon="1.6" /></waypoint>
+  </waypoints>
+</route>

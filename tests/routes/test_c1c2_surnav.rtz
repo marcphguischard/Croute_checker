@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll C1/C2 - SURNAV Gris-Nez Zone" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="49.9" lon="0.2" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="50.2" lon="0.05" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="50.35" lon="-0.05" /></waypoint>
+  </waypoints>
+</route>

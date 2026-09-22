@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll A3 - durch Calais VTS" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="50.95" lon="1.7" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="50.99" lon="1.75" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="51.0" lon="1.8" /></waypoint>
+  </waypoints>
+</route>

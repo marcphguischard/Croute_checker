@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll A2 - ausserhalb aller Gebiete" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="50.0" lon="0.5" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="50.1" lon="1.0" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="50.2" lon="1.5" /></waypoint>
+  </waypoints>
+</route>

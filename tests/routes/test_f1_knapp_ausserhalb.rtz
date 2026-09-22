@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll F1 - knapp ausserhalb CALDOVREP" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="51.4" lon="1.5" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="51.45" lon="1.8" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="51.5" lon="2.1" /></waypoint>
+  </waypoints>
+</route>

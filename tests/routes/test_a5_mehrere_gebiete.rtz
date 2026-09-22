@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<route xmlns="http://www.cirm.org/RTZ/1/1" version="1.1">
+  <routeInfo routeName="Testprotokoll A5 - Kanal-Durchquerung" />
+  <waypoints>
+    <waypoint id="1" name="WP1"><position lat="50.85" lon="0.8" /></waypoint>
+    <waypoint id="2" name="WP2"><position lat="51.0" lon="1.6" /></waypoint>
+    <waypoint id="3" name="WP3"><position lat="50.99" lon="1.75" /></waypoint>
+    <waypoint id="4" name="WP4"><position lat="51.05" lon="2.2" /></waypoint>
+    <waypoint id="5" name="WP5"><position lat="51.1" lon="2.6" /></waypoint>
+  </waypoints>
+</route>
