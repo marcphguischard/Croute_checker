@@ -1,0 +1,223 @@
+TESTPROTOKOLL: PLAUSIBILITÄTSPRÜFUNG ROUTE CHECKER
+==============================================================
+Systematische Tests für Geometrie + Filterlogik + Meldeinhalt-Ausgabe.
+Jeder Test hat eine ERWARTETE Ausgabe - notiere bei Durchführung ob das 
+tatsächliche Ergebnis damit übereinstimmt (Spalte "Ergebnis").
+
+==============================================================
+TEIL A: REINE GEOMETRIE-TESTS (Schiffsprofil: Standard-Frachter, 5000 GT, 
+kein Gefahrgut, kein Zielhafen Dover/Ramsgate)
+==============================================================
+
+TEST A1 - Route klar durch CALDOVREP
+Wegpunkte:
+  WP1: 50.90 1.00  (südwestlich außerhalb)
+  WP2: 51.00 1.80  (mitten durch CALDOVREP-Gebiet)
+  WP3: 51.15 2.20  (nordöstlich, weiter durch)
+ERWARTET: CALDOVREP wird als Meldepflicht ausgegeben (MAREP, Ch 13/11)
+Ergebnis: _______
+
+TEST A2 - Route klar AUSSERHALB aller Gebiete
+Wegpunkte:
+  WP1: 50.00 0.50  (weit südlich, offener Kanal)
+  WP2: 50.10 1.00
+  WP3: 50.20 1.50
+ERWARTET: KEINE Meldepflicht wird ausgegeben
+Ergebnis: _______
+
+TEST A3 - Route durch Calais VTS
+Wegpunkte:
+  WP1: 50.95 1.70  (Anfahrt von Westen)
+  WP2: 50.99 1.75  (mitten im Calais VTS Polygon)
+  WP3: 51.00 1.80
+ERWARTET: Calais VTS wird ausgegeben (Ch 17)
+Ergebnis: _______
+
+TEST A4 - Route durch Dunkirk VTS
+Wegpunkte:
+  WP1: 51.02 2.00
+  WP2: 51.05 2.20  (mitten im Dunkirk VTS Polygon)
+  WP3: 51.06 2.40
+ERWARTET: Dunkirk VTS wird ausgegeben (Ch 73)
+Ergebnis: _______
+
+TEST A5 - Route durch mehrere Gebiete gleichzeitig (Kanal-Durchquerung)
+Wegpunkte:
+  WP1: 50.85 0.80   (Startpunkt, außerhalb)
+  WP2: 51.00 1.60   (durch CALDOVREP)
+  WP3: 50.99 1.75   (durch Calais VTS)
+  WP4: 51.05 2.20   (durch Dunkirk VTS)
+  WP5: 51.10 2.60   (Endpunkt, außerhalb)
+ERWARTET: CALDOVREP + Calais VTS + Dunkirk VTS werden ALLE ausgegeben
+Ergebnis: _______
+
+==============================================================
+TEIL B: GT-SCHWELLEN-TESTS (Geometrie konstant: Route A1, klar durch 
+CALDOVREP)
+==============================================================
+
+TEST B1 - Schiff genau auf der Schwelle (300 GT)
+Schiffsprofil: 300 GT, Standard-Frachter, kein Gefahrgut, kein NUC-Status
+ERWARTET: CALDOVREP-Meldepflicht (Grenzfall, ≥300 GT zählt als Pflicht)
+Ergebnis: _______
+
+TEST B2 - Schiff knapp unter der Schwelle (299 GT), ohne Sonderstatus
+Schiffsprofil: 299 GT, Standard-Frachter, kein Gefahrgut, kein NUC-Status
+ERWARTET: KEINE CALDOVREP-Pflicht (unter 300 GT, keine Ausnahmebedingung 
+erfüllt)
+Ergebnis: _______
+
+TEST B3 - Schiff großes Containerschiff
+Schiffsprofil: 45000 GT, Containerschiff, kein Gefahrgut
+ERWARTET: CALDOVREP-Meldepflicht
+Ergebnis: _______
+
+==============================================================
+TEIL C: LADUNGSABHÄNGIGE SYSTEME (SURNAV, WETREP)
+==============================================================
+
+TEST C1 - Route durch SURNAV Gris-Nez Zone, OHNE Gefahrgut
+Wegpunkte:
+  WP1: 49.90 0.20   (südlich, in Gris-Nez Zone)
+  WP2: 50.20 0.05   (weiter durch die Zone)
+  WP3: 50.35 -0.05  (Ende, nahe Greenwich Lt F)
+Schiffsprofil: 10000 GT, Frachter, KEIN Gefahrgut, KEIN Öl
+ERWARTET: KEINE SURNAV-Meldepflicht (Ladung erfüllt Bedingung nicht, obwohl 
+Route geometrisch durch die Zone verläuft)
+Ergebnis: _______
+
+TEST C2 - Gleiche Route, MIT Gefahrgut
+Schiffsprofil: 10000 GT, Frachter, MIT Gefahrgut (IMDG Klasse 3, entzündbare 
+Flüssigkeit)
+ERWARTET: SURNAV-Meldepflicht wird ausgegeben
+Ergebnis: _______
+
+TEST C3 - Route durch WETREP-relevanten Kanalbereich (Punkte s/t Region)
+Wegpunkte:
+  WP1: 51.30 3.00
+  WP2: 51.40 3.30   (nahe Punkt s: 51.37367, 3.36450)
+  WP3: 51.90 1.80
+  WP4: 52.15 1.60   (nahe Punkt t: 52.20000, 1.62500)
+Schiffsprofil: Öltanker, 800 tdw, Schweröl-Ladung (Dichte 920 kg/m³)
+ERWARTET: WETREP-Meldepflicht wird ausgegeben
+Ergebnis: _______
+
+TEST C4 - Gleiche Route, aber KEIN Öltanker
+Schiffsprofil: 10000 GT, normaler Frachter, keine Ölladung
+ERWARTET: KEINE WETREP-Meldepflicht (Route trifft zwar Gebiet, aber 
+Schiffstyp/Ladung erfüllt Bedingung nicht)
+Ergebnis: _______
+
+TEST C5 - Öltanker mit LEICHTEM statt schwerem Öl
+Schiffsprofil: Öltanker, 800 tdw, Rohöl-Ladung (Dichte 850 kg/m³, UNTER der 
+900 kg/m³ Schwelle)
+ERWARTET: KEINE WETREP-Meldepflicht (Dichte unterschreitet Schwellenwert)
+Ergebnis: _______
+
+==============================================================
+TEIL D: ZIELHAFEN-ERKENNUNG (Dover, Ramsgate)
+==============================================================
+
+TEST D1 - Route mit Zielhafen Dover (letzter Wegpunkt IM Dover-Kreis)
+Wegpunkte:
+  WP1: 50.90 1.00
+  WP2: 51.00 1.60   (durch CALDOVREP)
+  WP3: 51.11 1.34   (Endpunkt, im 3-sm-Kreis um Dover: Zentrum 51.1175, 
+                      1.33567)
+Schiffsprofil: 5000 GT, Standard-Frachter
+ERWARTET: CALDOVREP-Meldepflicht UND Dover-VTS-Meldepflicht (beide!)
+Ergebnis: _______
+
+TEST D2 - Route verläuft NUR durch den Dover-Kreis, Ziel liegt woanders
+Wegpunkte:
+  WP1: 50.90 1.00
+  WP2: 51.11 1.34   (streift Dover-Kreis, aber NICHT Endpunkt)
+  WP3: 51.30 2.00   (Endpunkt, weit außerhalb Dover)
+Schiffsprofil: 5000 GT, Standard-Frachter
+ERWARTET: KEINE Dover-VTS-Meldepflicht (nur Durchtransit, kein Zielhafen)
+Ergebnis: _______
+
+TEST D3 - Route mit Zielhafen Ramsgate
+Wegpunkte:
+  WP1: 51.00 1.00
+  WP2: 51.20 1.30
+  WP3: 51.32 1.45   (Endpunkt, im 2.5-sm-Kreis um Ramsgate: Zentrum 
+                      51.32517, 1.45483)
+Schiffsprofil: 5000 GT, Standard-Frachter
+ERWARTET: Ramsgate-Meldepflicht wird ausgegeben
+Ergebnis: _______
+
+==============================================================
+TEIL E: MELDEINHALT-PLAUSIBILITÄT (kein Kartenbedarf, reiner Textvergleich)
+==============================================================
+
+Für JEDEN der obigen Tests, bei denen eine Meldepflicht ausgegeben wird: 
+prüfe den ausgegebenen Meldeinhalt gegen die Kategorisierungstabelle 
+(kategorisierung_meldepflichten.txt bzw. vollstaendige_adp_erfassung.txt).
+
+TEST E1 - CALDOVREP Meldeinhalt (basierend auf Test A1)
+Prüfen ob folgende Felder in der Ausgabe vorkommen:
+  [ ] A: Schiffsname, Rufzeichen, IMO/MMSI
+  [ ] B: Datum und Zeit
+  [ ] C/D: Position
+  [ ] E: Kurs
+  [ ] F: Geschwindigkeit
+  [ ] G: Abgangshafen
+  [ ] I: Zielhafen + ETA
+  [ ] O: Tiefgang
+  [ ] P: Ladung (+ IMO-Klasse falls Gefahrgut)
+  [ ] Q/R: Mängel/Schäden
+  [ ] T: Kontakt für Gefahrgut-Info
+  [ ] W: Personen an Bord
+  [ ] X: Bunkermenge (nur falls >5000t) + Navigationsbedingungen
+Ergebnis: _______
+
+TEST E2 - SURNAV Meldeinhalt (basierend auf Test C2)
+Prüfen ob Felder A,B,C,E,F,G,H,I,K,M,O,P,Q,U,X,Z (SURNAV-FRANCE Format) 
+korrekt und vollständig ausgegeben werden
+Ergebnis: _______
+
+TEST E3 - WETREP Meldeinhalt (basierend auf Test C3)
+Prüfen ob als Sailing Plan (SP) korrekt die Felder A,B,C,E,F,G,I,P,T,W,X 
+ausgegeben werden (NICHT die reduzierten Felder von Final Report oder 
+Deviation Report, da es sich um Ersteinfahrt handelt)
+Ergebnis: _______
+
+==============================================================
+TEIL F: NEGATIVBEISPIEL / GRENZFALL-TEST
+==============================================================
+
+TEST F1 - Route die knapp AUSSERHALB von CALDOVREP verläuft
+Wegpunkte (bewusst leicht nördlich der CALDOVREP-Nordgrenze gewählt):
+  WP1: 51.40 1.50
+  WP2: 51.45 1.80
+  WP3: 51.50 2.10
+ERWARTET: KEINE CALDOVREP-Meldepflicht (Route verläuft nördlich der 
+North-Foreland-zu-Belgien-Linie, also außerhalb)
+Ergebnis: _______
+
+TEST F2 - Schiffstyp-Ausnahme (Regierungsschiff bei WETREP)
+Schiffsprofil: Marineschiff/Regierungsschiff im nicht-kommerziellen Dienst, 
+Route wie Test C3
+ERWARTET: KEINE WETREP-Meldepflicht (explizite Ausnahme laut ADP)
+HINWEIS: Nur testbar falls "Regierungsschiff"-Option im Schiffsprofil 
+existiert - falls nicht vorhanden, als Erweiterungsidee vermerken
+Ergebnis: _______
+
+==============================================================
+AUSWERTUNG
+==============================================================
+Anzahl Tests gesamt: 18 (A1-A5, B1-B3, C1-C5, D1-D3, E1-E3, F1-F2)
+Anzahl bestanden: _____ / 18
+Anzahl fehlgeschlagen: _____ / 18
+
+Bei Fehlschlägen: Notiere hier kurz was falsch war, für spätere Fehlersuche:
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+
+HINWEIS FÜR BACHELORARBEIT: Dieses Testprotokoll (ggf. gekürzt oder als 
+repräsentative Auswahl) eignet sich gut für Kapitel 6 "Validierung & Test" 
+oder als Teil von Kapitel 5.4 "Resultat" - zeigt strukturiertes, 
+nachvollziehbares Vorgehen bei der Funktionsprüfung des Tools, unabhängig 
+von der später folgenden Probandenstudie.
