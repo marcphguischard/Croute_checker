@@ -102,6 +102,11 @@ def baue_gebiete(df):
                 'traffic_flow': reihe['Traffic_Flow'] if pd.notna(reihe['Traffic_Flow']) else "",
                 'source_type': reihe['Source_Type'] if pd.notna(reihe['Source_Type']) else "",
                 'source_reference': reihe['Source_Reference'] if pd.notna(reihe['Source_Reference']) else "",
+                # Primaerquellen-Nachweis (IMO-Entschliessungen, nationale Erlasse,
+                # General Directions) - ergaenzt/ersetzt Source_Type/Source_Reference
+                # fuer die Anzeige, siehe ausgabe.formatiere_quellenanzeige().
+                'primary_source_reference': reihe['Primary_Source_Reference'] if pd.notna(reihe['Primary_Source_Reference']) else "",
+                'verification_status': reihe['Verification_Status'] if pd.notna(reihe['Verification_Status']) else "",
                 # Optionale Spalte, existiert in der heutigen CSV noch nicht - nur
                 # auswerten, wenn vorhanden, sonst Default "" (Kleinkorrektur 1.2.6).
                 'reporting_station': (

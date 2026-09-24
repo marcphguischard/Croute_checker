@@ -27,6 +27,28 @@ def formatiere_vorlaufzeit(stunden, text):
     return " ".join(teile)
 
 
+# Zusatztext hinter der Quellenangabe, abhaengig vom Verification_Status der
+# Primaerquelle (siehe Primaerquellen-Auftrag: IMO-Entschliessungen, nationale
+# Erlasse, General Directions statt ADP/ALRS als Nachweis).
+VERIFICATION_STATUS_ZUSATZ = {
+    "open": " (source not yet verified)",
+    "candidate": " (source not yet verified)",
+    "no_public_source": " (no public primary source; based on nautical publications)",
+}
+
+
+# Baut den Anzeigetext fuer "Source: ..." - nutzt die Primaerquelle
+# (Primary_Source_Reference), falls vorhanden, sonst die bisherige
+# Source_Reference (ADP/ALRS-Fundstelle). Haengt je nach Verification_Status
+# einen Hinweis an, dass die Primaerquelle noch nicht (candidate/open) bzw.
+# nie oeffentlich verifizierbar (no_public_source) ist.
+def formatiere_quellenanzeige(source_reference, primary_source_reference, verification_status):
+    quelle = primary_source_reference if primary_source_reference else source_reference
+    if not quelle:
+        return quelle
+    return quelle + VERIFICATION_STATUS_ZUSATZ.get(verification_status, "")
+
+
 # Ordnet den Relationship_Type-Wert einer Statuszeile fuer die Ausgabe zu
 # (aktuell sind alle geometrisch geprueften Gebiete "required" - die anderen Zweige
 # sind fuer zukuenftige, als "recommended" o.ae. markierte Gebiete vorbereitet)

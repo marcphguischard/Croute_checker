@@ -4,6 +4,7 @@ from shapely.geometry import LineString, Point
 
 from .ausgabe import (
     formatiere_frequenz,
+    formatiere_quellenanzeige,
     formatiere_report_typen,
     formatiere_vorlaufzeit,
     relationship_status_label,
@@ -256,7 +257,9 @@ def pruefe_route(Schiffsdaten, wegpunkte, gebiete):
             'status_label': status_label,
             'report_typen_text': report_typen_text,
             'vorlaufzeit_text': vorlaufzeit_text,
-            'source_reference': daten['source_reference'],
+            'source_reference': formatiere_quellenanzeige(
+                daten['source_reference'], daten['primary_source_reference'], daten['verification_status']
+            ),
             'reporting_station': daten['reporting_station'],
             'geometrie_geojson': geometrie_zu_geojson(geometrie),
         }
