@@ -82,7 +82,8 @@ python3 -m pytest
 
 44 Tests zur Prüf-Logik (`tests/test_geometrie.py`, `tests/test_schwellenwert.py`,
 `tests/test_plausibilitaet.py` - basierend auf `testprotokoll_plausibilitaet.txt`)
-plus 8 Tests zur Web-Oberfläche (`tests/test_web.py`).
+plus 8 Tests zur Web-Oberfläche (`tests/test_web.py`) plus 9 Tests zum
+Primärquellen-Nachweis (`tests/test_quellen.py`, siehe unten).
 
 ## Projektstruktur
 
@@ -92,8 +93,40 @@ cli.py              Kommandozeilen-Bedienung
 main.py             duenner Einstiegspunkt fuer "python3 main.py"
 web/                Flask-Web-Oberflaeche (app.py, templates/, static/)
 tests/              pytest-Tests + Testrouten
+scripts/            Hilfsskripte (z.B. pruefe_quellen.py)
 reporting_points.csv  Meldegebiete (Geometrie + Kriterien)
 CHANGELOG.md        Entwicklungsverlauf
 ```
 
 Siehe `CHANGELOG.md` für Details zu allen Entwicklungsschritten.
+
+## Datengrundlage und Quellennachweis
+
+`reporting_points.csv` dokumentiert für jedes Meldegebiet zwei getrennte
+Quellenangaben:
+
+- **`Source_Type` / `Source_Reference`**: das nautische Arbeitsmittel
+  (ADP/ALRS), über das das System ursprünglich gefunden wurde. Bleibt
+  unverändert als Fundstellen-Nachweis erhalten.
+- **`Primary_Source_Type` / `Primary_Source_Reference` / `Primary_Source_Date`
+  / `Primary_Source_URL`**: die Primärquelle (IMO-Entschließung, nationaler
+  Erlass/Arrêté, britische General Directions), auf die die Bachelorarbeit
+  sich stützt.
+
+Der Bearbeitungsstand jeder Primärquelle steht in `Verification_Status`:
+
+| Status | Bedeutung |
+| --- | --- |
+| `verified` | Primärquelle geprüft und bestätigt; `Primary_Source_Reference`, `Primary_Source_Date` und `Verification_Date` sind gefüllt. |
+| `candidate` | Primärquelle recherchiert, aber noch nicht gegengeprüft. |
+| `open` | Noch keine Primärquelle gefunden. |
+| `no_public_source` | Es existiert keine öffentlich zugängliche Primärquelle; die Angabe stützt sich weiterhin auf ADP/ALRS. |
+
+Textbericht und Web-Ergebnisseite zeigen unter „Source" die Primärquelle,
+sofern vorhanden, sonst wie bisher `Source_Reference` - bei `open`/`candidate`
+mit dem Zusatz „(source not yet verified)", bei `no_public_source` mit
+„(no public primary source; based on nautical publications)".
+
+Mit `python scripts/pruefe_quellen.py` (optional `--markdown`) lässt sich der
+aktuelle Bearbeitungsstand aller Gebiete als Bericht ausgeben, inklusive
+Warnungen bei unvollständigen `verified`-Einträgen.

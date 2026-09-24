@@ -3,6 +3,55 @@
 Strukturierte, chronologische Übersicht der Entwicklungsschritte am Route Checker.
 Jeder Eintrag: Datum, was gemacht wurde, warum.
 
+## 2026-09-24 – Primärquellen-Nachweis (Bachelorarbeit)
+
+Für die Bachelorarbeit soll die Datengrundlage nicht mehr nur auf ADP/ALRS
+verweisen, sondern auf Primärquellen (IMO-Entschließungen, nationale
+Erlasse/Arrêtés, britische General Directions) gestützt sein. Bestehende
+Werte in `reporting_points.csv` bleiben dabei unverändert - nur Struktur und
+Prüfwerkzeuge wurden ergänzt, die inhaltliche Recherche/Verifikation bleibt
+Aufgabe des Nutzers.
+
+**`reporting_points.csv`:** sechs neue, leere Spalten je Gebietszeile:
+`Primary_Source_Type`, `Primary_Source_Reference`, `Primary_Source_Date`,
+`Primary_Source_URL`, `Verification_Status` (`verified`/`candidate`/`open`/
+`no_public_source`), `Verification_Date`. Für DS CALDOVREP und WETREP mit den
+bereits recherchierten IMO-Resolutionen (MSC.85(70) bzw. MSC.190(79))
+vorbefüllt, Status bewusst `candidate` bis zur manuellen Gegenprüfung. Alle
+übrigen Gebiete: Spalten vorhanden, aber leer.
+
+**Anzeige (`route_checker/ausgabe.py`, `route_checker/gebiete.py`,
+`route_checker/pruefung.py`):** neue Funktion `formatiere_quellenanzeige()`
+zeigt `Primary_Source_Reference`, falls vorhanden, sonst weiterhin
+`Source_Reference` - mit Zusatz „(source not yet verified)" bei
+`open`/`candidate` bzw. „(no public primary source; based on nautical
+publications)" bei `no_public_source`. Greift automatisch in Textbericht UND
+Web-Ergebnisseite, da beide denselben `eintrag['source_reference']`-Schlüssel
+aus `pruefe_route()` nutzen - keine Änderung an `ausgabe.erzeuge_textbericht()`
+oder `web/templates/result.html` nötig.
+
+**`scripts/pruefe_quellen.py`:** liest die CSV nur lesend, gibt eine
+Konsolen-Tabelle aller Gebiete (Verification_Status, Primary_Source_Reference)
+aus, dazu Zusammenfassung (Anzahl/Prozent je Status) und Warnungen bei
+unvollständigen `verified`-Einträgen oder unbekannten Statuswerten.
+`--markdown` liefert denselben Bericht als Markdown-Tabelle für den Anhang
+der Arbeit.
+
+**Tests:** `tests/test_quellen.py` (9 Fälle) - neue Spalten in Header und
+jeder Gebietszeile vorhanden, `Verification_Status` nur erlaubte Werte (sofern
+gefüllt), `verified` erfordert Referenz + beide Datumsfelder, Anzeige-Logik
+liefert für alle vier Statusfälle den erwarteten Text. Läuft im Ist-Zustand
+(fast alle Felder leer) durch, da nur gefüllte Angaben geprüft werden.
+Zusammen mit den bestehenden Tests: **61/61 Tests grün.**
+
+**Vorab behoben:** das lokale Git-Repository war beim Start dieser Session
+beschädigt (unvollständige Objekt-Datenbank, `HEAD` nicht lesbar) und mehrere
+committete Dateien (`cli.py`, `route_checker/`, `web/`, `tests/`,
+`requirements.txt`) fehlten im Arbeitsverzeichnis. Durch `git fetch origin`
+(repariert die Objekt-Datenbank aus dem GitHub-Remote) und anschließendes
+`git restore` (nutzergenehmigt) wiederhergestellt - keine Daten verloren, da
+GitHub bereits den vollständigen Stand hatte.
+
 ## 2026-09-22 (Teil 2) – Phase 2: Web-Oberfläche mit Flask
 
 Aufbauend auf Phase 1 (route_checker-Paket): browserbasierte Bedienung für die
